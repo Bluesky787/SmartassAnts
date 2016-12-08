@@ -1,13 +1,11 @@
 using System;
 using System.Collections.Generic;
-
 using AntMe.Deutsch;
 
 // Füge hier hinter AntMe.Spieler einen Punkt und deinen Namen ohne Leerzeichen
 // ein! Zum Beispiel "AntMe.Spieler.WolfgangGallo".
 namespace AntMe.SmartassAnts
-{
-    
+{    
 
     enum KasteTypen
     {
@@ -73,7 +71,8 @@ namespace AntMe.SmartassAnts
 
     public class MeineAmeise : Basisameise
 	{
-
+        
+        
 
         #region Character
         readonly int MarkierungGrößeSpotter = 100;
@@ -126,6 +125,7 @@ namespace AntMe.SmartassAnts
             {
                 case (int)KasteTypen.Standard:
                     GeheGeradeaus();
+                    
                     break;
                 case (int)KasteTypen.Aggro:
                     if (Ziel != null)
@@ -138,13 +138,21 @@ namespace AntMe.SmartassAnts
                     break;
 
                 case (int)KasteTypen.Foodloot:
-                    if (Ziel != null)
+                    if (/*!zuFaul*/true)
                     {
-                        GeheZuZiel(Ziel);
+
+                        if (Ziel != null)
+                        {
+                            GeheZuZiel(Ziel);
+                        }
+                        else
+                        {
+                            GeheGeradeaus();
+                        }
                     }
                     else
                     {
-                        GeheGeradeaus();
+
                     }
                     break;
                 case (int)KasteTypen.Spotter:
@@ -230,7 +238,8 @@ namespace AntMe.SmartassAnts
 		/// </summary>
 		/// <param name="zucker">Der Zuckerhaufen.</param>
 		public override void ZielErreicht(Zucker zucker)
-		{
+        { 
+
             //Zucker nehmen
             Nimm(zucker);
             trägtNahrung = true;
