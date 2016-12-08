@@ -67,16 +67,7 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="aTomApfelmeisen.cs" />
-    <Compile Include="aTomGruppenmeisen.cs" />
-    <Compile Include="aTomKampfmeisen.cs" />
-    <Compile Include="aTomZuckermeisen.cs" />
-    <Compile Include="DemoAMeisen.cs" />
-    <Compile Include="DemoBMeisen.cs" />
-    <Compile Include="DemoCMeisen.cs" />
     <Compile Include="DynamischeAmeisen.cs" />
-    <Compile Include="GruppenAmeisen.cs" />
-    <Compile Include="KreisAmeisen.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SmartassAnts.cs" />
   </ItemGroup>
