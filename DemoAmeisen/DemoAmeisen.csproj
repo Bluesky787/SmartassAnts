@@ -39,6 +39,7 @@
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <DebugSymbols>true</DebugSymbols>
@@ -69,12 +70,18 @@
   <ItemGroup>
     <Compile Include="Character.cs" />
     <Compile Include="DynamischeAmeisen.cs" />
+    <Compile Include="FuzzyEngine.cs" />
+    <Compile Include="Memory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SmartassAnts.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\DotFuzzy-master\DotFuzzy.csproj">
+      <Project>{6b1e0ce9-725e-477f-938c-625a25dbce70}</Project>
+      <Name>DotFuzzy</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SimulationCore\SimulationCore.csproj">
-      <Project>{35753E72-07F3-4F18-916C-479850EC375F}</Project>
+      <Project>{35753e72-07f3-4f18-916c-479850ec375f}</Project>
       <Name>SimulationCore</Name>
     </ProjectReference>
   </ItemGroup>

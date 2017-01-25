@@ -1,6 +1,9 @@
 using System;
 using System.Collections.Generic;
 using AntMe.Deutsch;
+using DotFuzzy;
+using AntMe.DemoAmeisen;
+
 
 // Füge hier hinter AntMe.Spieler einen Punkt und deinen Namen ohne Leerzeichen
 // ein! Zum Beispiel "AntMe.Spieler.WolfgangGallo".
@@ -71,19 +74,26 @@ namespace AntMe.SmartassAnts
 
     public class MeineAmeise : Basisameise
 	{
-        
-        
+		#region Character
+		readonly int MarkierungGrößeSpotter = 100;
+		readonly int MarkierungGrößeHilfe = 200;
+		readonly int MarkierungGrößeSammler = 50;
+		readonly int MarkierungGrößeJäger = 50;
 
-        #region Character
-        readonly int MarkierungGrößeSpotter = 100;
-        readonly int MarkierungGrößeHilfe = 200;
-        readonly int MarkierungGrößeSammler = 50;
-        readonly int MarkierungGrößeJäger = 50;
+		Character character;
+		Memory memory = new Memory();
 
-        Nahrung ZielSammeln;
-        Insekt ZielGegner;
-        
-        #endregion
+		Nahrung ZielSammeln;
+		Insekt ZielGegner;
+
+		#endregion
+		public MeineAmeise()
+		{
+			character = new Character(this);
+		}
+
+
+       
         
         #region Kaste
 
@@ -121,47 +131,18 @@ namespace AntMe.SmartassAnts
 		/// </summary>
 		public override void Wartet()
 		{
-            switch (this.CasteIndex)
+			//if (FuzzyInferenceSystem.DecisionHaveABreak(character.faulheit, character.energie, character.laufen, memory.GetDecisionValue(Decisions.Laufen)))
+			if (FuzzyInferenceSystem.Superdecision5x5x2(character.faulheit, character.energie, character.laufen, memory.GetDecisionValue(DecisionType.Laufen)))
+			{
+				GeheGeradeaus();
+				memory.ActionDone(DecisionType.Laufen);
+				//Ziel?
+			}
+			else
             {
-                case (int)KasteTypen.Standard:
-                    GeheGeradeaus();
-                    
-                    break;
-                case (int)KasteTypen.Aggro:
-                    if (Ziel != null)
-                    {
-                        GeheZuZiel(Ziel);
-                    }
-                    else {
-                        GeheGeradeaus();
-                    }
-                    break;
-
-                case (int)KasteTypen.Foodloot:
-                    if (/*!zuFaul*/true)
-                    {
-
-                        if (Ziel != null)
-                        {
-                            GeheZuZiel(Ziel);
-                        }
-                        else
-                        {
-                            GeheGeradeaus();
-                        }
-                    }
-                    else
-                    {
-
-                    }
-                    break;
-                case (int)KasteTypen.Spotter:
-                    GeheGeradeaus();
-                    break;
-                default:
-                    break;
-            }
-
+				//weiter stehen bleiben
+				//this.BleibStehen();
+			}
 		}
 
 		/// <summary>
@@ -170,7 +151,7 @@ namespace AntMe.SmartassAnts
 		/// </summary>
 		public override void WirdMüde()
 		{
-            GeheZuBau();
+            //GeheZuBau();
 		}
 
         #endregion
@@ -188,7 +169,7 @@ namespace AntMe.SmartassAnts
 		/// <param name="zucker">Der nächstgelegene Zuckerhaufen.</param>
 		public override void Sieht(Zucker zucker)
 		{            
-            if (Kaste == KasteTypen.Foodloot.ToString()) {
+            /*if (Kaste == KasteTypen.Foodloot.ToString()) {
                 if (!trägtNahrung)
                 {
                     //Neues Ziel
@@ -202,7 +183,7 @@ namespace AntMe.SmartassAnts
             }
             if (Kaste == KasteTypen.Spotter.ToString()) {
                 SprüheMarkierung((int)Information.ZielNahrung, MarkierungGrößeSpotter);
-            }
+            }*/
 		}
 
 		/// <summary>
@@ -212,7 +193,7 @@ namespace AntMe.SmartassAnts
 		/// <param name="obst">Das nächstgelegene Obststück.</param>
 		public override void Sieht(Obst obst)
 		{
-            if (Kaste == KasteTypen.Foodloot.ToString() && BrauchtNochTräger(obst))
+            /*if (Kaste == KasteTypen.Foodloot.ToString() && BrauchtNochTräger(obst))
             {
                 if (!trägtNahrung)
                 {
@@ -229,7 +210,7 @@ namespace AntMe.SmartassAnts
             if (Kaste == KasteTypen.Spotter.ToString())
             {
                 SprüheMarkierung((int)Information.ZielNahrung, MarkierungGrößeSpotter);
-            }
+            }*/
         }
 
 		/// <summary>
@@ -239,12 +220,12 @@ namespace AntMe.SmartassAnts
 		/// <param name="zucker">Der Zuckerhaufen.</param>
 		public override void ZielErreicht(Zucker zucker)
         { 
-
+			/*
             //Zucker nehmen
             Nimm(zucker);
             trägtNahrung = true;
             GeheZuBau();
-
+			*/
         }
 
 		/// <summary>
@@ -254,9 +235,9 @@ namespace AntMe.SmartassAnts
 		/// <param name="obst">Das Obstück.</param>
 		public override void ZielErreicht(Obst obst)
 		{
-            Nimm(obst);
+            /*Nimm(obst);
             trägtNahrung = true;
-            GeheZuBau();
+            GeheZuBau();*/
 		}
 
 		#endregion
@@ -278,6 +259,7 @@ namespace AntMe.SmartassAnts
 		/// <param name="markierung">Die nächste neue Markierung.</param>
 		public override void RiechtFreund(Markierung markierung)
 		{
+			/*
             switch(markierung.Information)
             {
                 case (int)Information.ZielNahrung:
@@ -299,8 +281,8 @@ namespace AntMe.SmartassAnts
                         GeheZuZiel(markierung);
                     }
                     break;
-
-            }
+					
+            }*/
 		}
 
 		/// <summary>
@@ -332,6 +314,7 @@ namespace AntMe.SmartassAnts
 		/// <param name="wanze">Die nächstgelegene Wanze.</param>
 		public override void SiehtFeind(Wanze wanze)
 		{
+			/*
             if (Kaste == KasteTypen.Aggro.ToString())
             {
                 //Neues Ziel
@@ -346,7 +329,7 @@ namespace AntMe.SmartassAnts
             if (Kaste == KasteTypen.Spotter.ToString())
             {
                 SprüheMarkierung((int)Information.ZielGegner, MarkierungGrößeSpotter);
-            }
+            }*/
         }
 
 		/// <summary>
@@ -356,7 +339,16 @@ namespace AntMe.SmartassAnts
 		/// <param name="ameise">Die nächstgelegen feindliche Ameise.</param>
 		public override void SiehtFeind(Ameise ameise)
 		{
-            if (Kaste == KasteTypen.Aggro.ToString())
+			
+			//if (FuzzyInferenceSystem.DecisionKillAnt(character.wut, character.energie, character.angreifen, memory.GetDecisionValue(DecisionType.AngreifenAmeise)))
+			if (FuzzyInferenceSystem.Superdecision5x5x2(character.wut, character.energie, character.angreifen, memory.GetDecisionValue(DecisionType.AngreifenAmeise)))
+			{
+				GreifeAn(ameise);
+				memory.ActionDone(DecisionType.AngreifenAmeise);
+			}
+
+
+			/*if (Kaste == KasteTypen.Aggro.ToString())
             {
                 //Neues Ziel
                 ZielGegner = ameise;
@@ -370,8 +362,8 @@ namespace AntMe.SmartassAnts
             if (Kaste == KasteTypen.Spotter.ToString())
             {
                 SprüheMarkierung((int)Information.ZielGegner, MarkierungGrößeSpotter);
-            }
-        }
+            }*/
+		}
 
 		/// <summary>
 		/// Wird wiederholt aufgerufen, wenn die Ameise von einer Wanze angegriffen
@@ -380,9 +372,11 @@ namespace AntMe.SmartassAnts
 		/// <param name="wanze">Die angreifende Wanze.</param>
 		public override void WirdAngegriffen(Wanze wanze)
 		{
+			/*
             SprüheMarkierung((int)Information.Hilfe, MarkierungGrößeHilfe);
             GreifeAn(wanze);
             greiftAn = true;
+			*/
 		}
 
 		/// <summary>
@@ -392,9 +386,11 @@ namespace AntMe.SmartassAnts
 		/// <param name="ameise">Die angreifende feindliche Ameise.</param>
 		public override void WirdAngegriffen(Ameise ameise)
 		{
+			/*
             SprüheMarkierung((int)Information.Hilfe, MarkierungGrößeHilfe);
             GreifeAn(ameise);
             greiftAn = true;
+			*/
         }
 
 		#endregion

@@ -355,7 +355,7 @@ namespace AntMe.Simulation {
 
             // Livetime and Respawn
             AntSimultaneousCount = 100;
-            BugSimultaneousCount = 5;
+            BugSimultaneousCount = 0;
             SugarSimultaneousCount = 1;
             FruitSimultaneousCount = 2;
 
@@ -365,7 +365,7 @@ namespace AntMe.Simulation {
             AntCountPlayerMultiplier = 0f;
 
             AntTotalCount = 999999;
-            BugTotalCount = 999999;
+            BugTotalCount = 0;
             SugarTotalCount = 999999;
             FruitTotalCount = 999999;
 
@@ -375,7 +375,7 @@ namespace AntMe.Simulation {
             FruitTotalCountPlayerMultiplier = 0f;
 
             AntRespawnDelay = 15;
-            BugRespawnDelay = 75;
+            BugRespawnDelay = 10000000;
             SugarRespawnDelay = 150;
             FruitRespawnDelay = 225;
 
