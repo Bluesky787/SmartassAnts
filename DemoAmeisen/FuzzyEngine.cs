@@ -124,7 +124,7 @@ namespace AntMe.SmartassAnts
 		}
 		*/
 
-		public static bool Superdecision5x5x2(CharacterType CharacterDependency1, CharacterType CharacterDependency2, Decision CharacterConsequent, double ratingAction)
+		public static bool Superdecision5x5x2(CharacterType CharacterDependency1, Circumstance CharacterDependency2, Decision CharacterConsequent, double ratingAction)
 		{
 			FuzzyEngine defuzzer = new FuzzyEngine();
 			defuzzer.LinguisticVariableCollection.Add(CharacterDependency1.characterParts);

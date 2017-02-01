@@ -1,5 +1,4 @@
-﻿using AntMe.DemoAmeisen;
-using AntMe.Deutsch;
+﻿using AntMe.Deutsch;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -53,82 +52,10 @@ namespace AntMe.SmartassAnts
 		{
 			return value;
 		}
-
-        /*        
-        internal String DetermineCharacterForm()
-        {
-            if (characterParts == null)
-                return "";
-
-            DotFuzzy.FuzzyEngine defuzzer = new DotFuzzy.FuzzyEngine();
-            defuzzer.FuzzyRuleCollection.Add()
-            return ""; 
-        }
-        */
     }
 
-	class Decision
-	{ 
-		public Decision(DecisionType DecisionType, string Option1, string Option2, bool FirstIsDefault)
-		{
-			option1 = Option1;
-			option2 = Option2;
-			firstIsDefault = FirstIsDefault;
-
-			characterParts = new DotFuzzy.LinguisticVariable(DecisionType.ToString());
-			characterParts.MembershipFunctionCollection.Add(new DotFuzzy.MembershipFunction(Option1, 0, 0, 50, 50));
-			characterParts.MembershipFunctionCollection.Add(new DotFuzzy.MembershipFunction(Option2, 50, 50, 100, 100));
-		}
-
-		private bool firstIsDefault;
-
-		protected double value = 0.0;
-		internal int numParts = 2;
-		private string option1, option2;
-		internal DotFuzzy.LinguisticVariable characterParts;
-		private DecisionType decisionType; 
-
-		public string Option1
-		{
-			get { return option1;}
-			private set { option1 = value; }
-		}
-
-		public string Option2
-		{
-			get { return option2; }
-			private set { option2 = value; }
-		}
-
-		public string DefaultDecision
-		{
-			get
-			{
-				if (firstIsDefault)
-					return option1;
-				else return option2;
-			}
-		}
-
-		public bool FirstOptionIsDefaultDecision
-		{
-			get { return firstIsDefault; }
-		}
-
-		public override string ToString()
-		{
-			return characterParts.Name;
-		}
-
-		public virtual double Value()
-		{
-			return value;
-		}
-	}
-
-    class Faulheit : CharacterType
-    {
-        
+	class Faulheit : CharacterType
+    {        
         public Faulheit(double InitValue)
         {
             this.value = InitValue;
@@ -142,30 +69,22 @@ namespace AntMe.SmartassAnts
         }
     }
 
-    class Energie : CharacterType
-    {
-		protected Basisameise parentAnt;
+	class Teamfaehigkeit : CharacterType
+	{
+		public Teamfaehigkeit(double InitValue)
+		{
+			this.value = InitValue;
 
-        public Energie(double InitValue, Basisameise ParentAnt)
-        {
-			parentAnt = ParentAnt;
-			value = InitValue;
+			characterParts = new DotFuzzy.LinguisticVariable("Teamfaehigkeit");
+			characterParts.MembershipFunctionCollection.Add(new DotFuzzy.MembershipFunction("Nicht_Teamfaehig", FuzzyValues[0][0], FuzzyValues[0][1], FuzzyValues[0][2], FuzzyValues[0][3]));
+			characterParts.MembershipFunctionCollection.Add(new DotFuzzy.MembershipFunction("Kaum_Teamfaehig", FuzzyValues[1][0], FuzzyValues[1][1], FuzzyValues[1][2], FuzzyValues[1][3]));
+			characterParts.MembershipFunctionCollection.Add(new DotFuzzy.MembershipFunction("Wenig_Teamfaehig", FuzzyValues[2][0], FuzzyValues[2][1], FuzzyValues[2][2], FuzzyValues[2][3]));
+			characterParts.MembershipFunctionCollection.Add(new DotFuzzy.MembershipFunction("Normal_Teamfaehig", FuzzyValues[3][0], FuzzyValues[3][1], FuzzyValues[3][2], FuzzyValues[3][3]));
+			characterParts.MembershipFunctionCollection.Add(new DotFuzzy.MembershipFunction("Sehr_Teamfaehig", FuzzyValues[4][0], FuzzyValues[4][1], FuzzyValues[4][2], FuzzyValues[4][3]));
+		}
+	}
 
-            characterParts = new DotFuzzy.LinguisticVariable("Energie");
-            characterParts.MembershipFunctionCollection.Add(new DotFuzzy.MembershipFunction("Sehr_Schwach", FuzzyValues[0][0], FuzzyValues[0][1], FuzzyValues[0][2], FuzzyValues[0][3]));
-            characterParts.MembershipFunctionCollection.Add(new DotFuzzy.MembershipFunction("Schwach", FuzzyValues[1][0], FuzzyValues[1][1], FuzzyValues[1][2], FuzzyValues[1][3]));
-            characterParts.MembershipFunctionCollection.Add(new DotFuzzy.MembershipFunction("Normal", FuzzyValues[2][0], FuzzyValues[2][1], FuzzyValues[2][2], FuzzyValues[2][3]));
-            characterParts.MembershipFunctionCollection.Add(new DotFuzzy.MembershipFunction("Ausgeruht", FuzzyValues[3][0], FuzzyValues[3][1], FuzzyValues[3][2], FuzzyValues[3][3]));
-            characterParts.MembershipFunctionCollection.Add(new DotFuzzy.MembershipFunction("Sehr_Ausgeruht", FuzzyValues[4][0], FuzzyValues[4][1], FuzzyValues[4][2], FuzzyValues[4][3]));
-        }
-
-        public override double Value()
-        {
-            return parentAnt.AktuelleEnergie;
-        }
-    }
-
-    class Wut : CharacterType
+	class Wut : CharacterType
 	{
 		public Wut(double InitValue)
 		{
@@ -180,15 +99,20 @@ namespace AntMe.SmartassAnts
 
 	class Character
     {
-        internal Faulheit faulheit;
-        internal Energie energie;
-        internal Wut wut;
-		
-		internal Basisameise parentAnt;
+		//Circumstances
+		internal Energie energie;
 
+		//CharacterTypes
+		internal Faulheit faulheit;
+        internal Wut wut;
+		internal Teamfaehigkeit teamfaehigkeit;
+		
+		//Decisions
 		internal Decision laufen = new Decision(DecisionType.Laufen, "Steht", "Laeuft", true);
 		internal Decision angreifen = new Decision(DecisionType.AngreifenAmeise, "Greift_nicht_an", "Greift_an", true);
+		internal Decision gruppieren = new Decision(DecisionType.Gruppieren, "Nicht_gruppieren", "Gruppieren", true);
 
+		internal Basisameise parentAnt;
 
 		// ...
 
@@ -198,8 +122,9 @@ namespace AntMe.SmartassAnts
 			parentAnt = Parent;
 
 			faulheit = new Faulheit(20);
-			energie = new Energie(100, parentAnt);
+			energie = new Energie(CircumstanceType.Energie, parentAnt);
 			wut = new Wut(0.0);
+			teamfaehigkeit = new Teamfaehigkeit(20);
 						
 			//Vereerben
 

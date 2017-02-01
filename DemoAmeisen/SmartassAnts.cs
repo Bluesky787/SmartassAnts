@@ -1,16 +1,12 @@
 using System;
 using System.Collections.Generic;
 using AntMe.Deutsch;
-using DotFuzzy;
-using AntMe.DemoAmeisen;
-
 
 // Füge hier hinter AntMe.Spieler einen Punkt und deinen Namen ohne Leerzeichen
 // ein! Zum Beispiel "AntMe.Spieler.WolfgangGallo".
 namespace AntMe.SmartassAnts
-{    
-
-    enum KasteTypen
+{
+	enum KasteTypen
     {
         Standard,
         Aggro,
@@ -26,6 +22,7 @@ namespace AntMe.SmartassAnts
 		Nachname = "Ants"
 	)]
 
+	#region Kastendefinitionen
 	// Das Typ-Attribut erlaubt das Ändern der Ameisen-Eigenschaften. Um den Typ
 	// zu aktivieren muß ein Name zugewiesen und dieser Name in der Methode 
 	// BestimmeTyp zurückgegeben werden. Das Attribut kann kopiert und mit
@@ -72,7 +69,9 @@ namespace AntMe.SmartassAnts
         AngriffModifikator = -1
     )]
 
-    public class MeineAmeise : Basisameise
+	#endregion
+
+	public class MeineAmeise : Basisameise
 	{
 		#region Character
 		readonly int MarkierungGrößeSpotter = 100;
@@ -91,9 +90,6 @@ namespace AntMe.SmartassAnts
 		{
 			character = new Character(this);
 		}
-
-
-       
         
         #region Kaste
 
@@ -292,7 +288,26 @@ namespace AntMe.SmartassAnts
 		/// <param name="ameise">Die nächstgelegene befreundete Ameise.</param>
 		public override void SiehtFreund(Ameise ameise)
 		{
-           
+			if (this.Ziel != null)
+			{
+				//nicht gruppieren
+			}
+			else
+			{
+				//grupperen entscheiden
+				if (FuzzyInferenceSystem.Superdecision5x5x2(character.teamfaehigkeit, character.energie, character.gruppieren, memory.GetDecisionValue(DecisionType.Gruppieren)))
+				{
+					this.SprüheMarkierung(0, 10);
+					this.GeheZuZiel(ameise);
+					memory.ActionDone(DecisionType.Gruppieren);
+				}
+				else
+				{
+					//nicht gruppieren
+				}
+			}
+
+
 		}
 
 		/// <summary>
@@ -343,6 +358,9 @@ namespace AntMe.SmartassAnts
 			//if (FuzzyInferenceSystem.DecisionKillAnt(character.wut, character.energie, character.angreifen, memory.GetDecisionValue(DecisionType.AngreifenAmeise)))
 			if (FuzzyInferenceSystem.Superdecision5x5x2(character.wut, character.energie, character.angreifen, memory.GetDecisionValue(DecisionType.AngreifenAmeise)))
 			{
+				//Hilfe rufen
+
+				//Angreifen
 				GreifeAn(ameise);
 				memory.ActionDone(DecisionType.AngreifenAmeise);
 			}

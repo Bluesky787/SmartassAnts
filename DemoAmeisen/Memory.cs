@@ -2,18 +2,8 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace AntMe.DemoAmeisen
+namespace AntMe.SmartassAnts
 {
-	public enum DecisionType
-	{
-		Laufen,
-		Wegrennen,
-		AngreifenAmeise,
-		AngreifenWanze,
-		SammelnZucker,
-		SammelnObst
-	}
-
 	class Memory
 	{
 		private List<DecisionType> lastActions;
