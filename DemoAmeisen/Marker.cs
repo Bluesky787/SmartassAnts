@@ -1,4 +1,5 @@
-﻿using AntMe.Simulation;
+﻿using AntMe.Deutsch;
+using AntMe.Simulation;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -21,10 +22,14 @@ namespace AntMe.SmartassAnts
         {
             Ort,
             Richtung,
+            Object,
+            Insekt
         }
 
         internal CoreCoordinate ort;
         internal int richtung;
+        internal Spielobjekt Objekt;
+        internal Insekt Insekt;
         internal MarkerInformationType markerInformation;
         internal MarkerType markerType;
         internal int id;
@@ -41,6 +46,20 @@ namespace AntMe.SmartassAnts
             this.markerType = markerType;
             this.markerInformation = MarkerInformationType.Richtung;
             this.richtung = richtung;
+        }
+
+        public Marker(MarkerType markerType, Spielobjekt objekt)
+        {
+            this.markerType = markerType;
+            this.markerInformation = MarkerInformationType.Object;
+            this.Objekt = objekt;
+        }
+
+        public Marker(MarkerType markerType, Insekt insect)
+        {
+            this.markerType = markerType;
+            this.markerInformation = MarkerInformationType.Insekt;
+            this.Insekt = insect;
         }
     }
 
