@@ -123,10 +123,11 @@ namespace AntMe.SmartassAnts
 			parentAnt = Parent;
 
             //Circumstances
-           
+            ameisenFeindeInNaehe = new AmeisenFeindeInNaehe(CircumstanceType.AmeisenFeindeInNähe, parentAnt);
+            ameisenFreundeInNaehe = new AmeisenFreundeInNaehe(CircumstanceType.AmeisenFreundeInNähe, parentAnt);
             energie = new Energie(CircumstanceType.Energie, parentAnt);
 
-
+            //Character
             faulheit = new Faulheit(20);
 			wut = new Wut(0.0);
 			teamfaehigkeit = new Teamfaehigkeit(20);

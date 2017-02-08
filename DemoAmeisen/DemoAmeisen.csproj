@@ -73,6 +73,7 @@
     <Compile Include="Decision.cs" />
     <Compile Include="DynamischeAmeisen.cs" />
     <Compile Include="FuzzyEngine.cs" />
+    <Compile Include="Marker.cs" />
     <Compile Include="Memory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SmartassAnts.cs" />
