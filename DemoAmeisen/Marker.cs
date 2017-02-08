@@ -50,10 +50,17 @@ namespace AntMe.SmartassAnts
 
         private int markerCounter = 0;
 
-        public void Add(Marker marker)
+        public int Add(Marker marker)
         {
             marker.id = markerCounter++;
             MarkerList.Add(marker);
+
+            return marker.id;
+        }
+
+        public Marker Get(int id)
+        {
+            return MarkerList[id];
         }
     }
 }
