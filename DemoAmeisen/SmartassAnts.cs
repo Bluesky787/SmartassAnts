@@ -311,10 +311,28 @@ namespace AntMe.SmartassAnts
 
                 case Marker.MarkerType.Obst:
                     //das gleiche wie bei siehtObst()
+
                     break;
 
                 case Marker.MarkerType.Zucker:
                     //das Gleiche wie bei siehtZucker()
+                    if (!trägtNahrung)
+                    {
+                        if (FuzzyInferenceSystem.Superdecision5x5x2(character.faulheit, character.energie, character.sammelnzucker, memory.GetDecisionValue(DecisionType.SammelnZucker)))
+                        {
+                            //SprüheMarkierung((int)Information.ZielNahrung, MarkierungGrößeSammler);
+                            //if (marker.markerInformation == Marker.MarkerInformationType.Ort)
+                              // this.DreheInRichtung(marker.ort - )
+                            memory.ActionDone(DecisionType.SammelnZucker);
+
+                            //SprüheMarkierung
+                            SprüheMarkierung(Markers.Add(new Marker(Marker.MarkerType.Zucker, CoordinateBase)), MarkierungGrößeInformation);
+                        }
+                    }
+                    else
+                    {
+                        //traegt Nahrung
+                    }
                     break;
 
                 default:
@@ -325,33 +343,6 @@ namespace AntMe.SmartassAnts
                     }
                     break;
             }
-
-            
-
-			/*
-            switch(markierung.Information)
-            {
-                case (int)Information.ZielNahrung:
-                    if (Kaste == KasteTypen.Foodloot.ToString()) {
-                        if (!trägtNahrung)
-                            GeheZuZiel(markierung);
-                    }
-                    break;
-                case (int)Information.ZielGegner:
-                    if (Kaste == KasteTypen.Aggro.ToString()) {
-                        if (!greiftAn && Ziel == null)
-                            GeheZuZiel(markierung);
-                    }
-                    break;
-                case (int)Information.Hilfe:
-                    if (!hilftFreund)
-                    {
-                        LasseNahrungFallen();
-                        GeheZuZiel(markierung);
-                    }
-                    break;
-					
-            }*/
 		}
 
 		/// <summary>
@@ -507,6 +498,7 @@ namespace AntMe.SmartassAnts
                     if (BrauchtNochTräger(GetragenesObst))
                     {
                         SprüheMarkierung(Markers.Add(new SmartassAnts.Marker(Marker.MarkerType.HilfeObst, CoordinateBase)), MarkierungGrößeHilfeLokal);
+                        
                     }
                 }
             }
