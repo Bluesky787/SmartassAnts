@@ -21,7 +21,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpielervorlageCS", "Spieler
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GdiPlusPlugin", "GdiPlusPlugin\GdiPlusPlugin.csproj", "{4083B1E6-5EB5-4E51-BB09-EEC4B489F355}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotFuzzy", "..\..\DotFuzzy-master\DotFuzzy.csproj", "{6B1E0CE9-725E-477F-938C-625A25DBCE70}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotFuzzy", "DotFuzzy\DotFuzzy.csproj", "{6B1E0CE9-725E-477F-938C-625A25DBCE70}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

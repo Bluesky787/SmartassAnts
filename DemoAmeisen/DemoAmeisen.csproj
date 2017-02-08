@@ -78,7 +78,7 @@
     <Compile Include="SmartassAnts.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\DotFuzzy-master\DotFuzzy.csproj">
+    <ProjectReference Include="..\DotFuzzy\DotFuzzy.csproj">
       <Project>{6b1e0ce9-725e-477f-938c-625a25dbce70}</Project>
       <Name>DotFuzzy</Name>
     </ProjectReference>
