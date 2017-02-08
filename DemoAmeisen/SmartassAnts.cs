@@ -149,7 +149,7 @@ namespace AntMe.SmartassAnts
 		/// </summary>
 		public override void WirdMüde()
 		{
-            //GeheZuBau();
+            GeheZuBau();
 		}
 
         #endregion
@@ -167,31 +167,13 @@ namespace AntMe.SmartassAnts
 		/// <param name="zucker">Der nächstgelegene Zuckerhaufen.</param>
 		public override void Sieht(Zucker zucker)
 		{
-            /*if (Kaste == KasteTypen.Foodloot.ToString()) {
-                if (!trägtNahrung)
-                {
-                    //Neues Ziel
-                    ZielSammeln = zucker;
-
-                    //Weitererzählen
-                    SprüheMarkierung((int)Information.ZielNahrung, MarkierungGrößeSammler);
-
-                    GeheZuZiel(zucker);
-                }
-            }
-            if (Kaste == KasteTypen.Spotter.ToString()) {
-                SprüheMarkierung((int)Information.ZielNahrung, MarkierungGrößeSpotter);
-            }*/
-
             if (!trägtNahrung)
             {
-
-                if (FuzzyInferenceSystem.Superdecision5x5x2(character.faulheit, character.energie, character.laufen, memory.GetDecisionValue(DecisionType.Laufen)) &&
-                    FuzzyInferenceSystem.Superdecision5x5x2(character.faulheit, character.energie, character.sammelnzucker, memory.GetDecisionValue(DecisionType.SammelnZucker)))
+                if (FuzzyInferenceSystem.Superdecision5x5x2(character.faulheit, character.energie, character.sammelnzucker, memory.GetDecisionValue(DecisionType.SammelnZucker)))
                 {
                     SprüheMarkierung((int)Information.ZielNahrung, MarkierungGrößeSammler);
                     GeheZuZiel(zucker);
-                    memory.ActionDone(DecisionType.Laufen);
+                    memory.ActionDone(DecisionType.SammelnZucker);
                 }
             }
             else
@@ -218,27 +200,10 @@ namespace AntMe.SmartassAnts
                     
 
                 }
-               else { }
-            }
-
-            /*if (Kaste == KasteTypen.Foodloot.ToString() && BrauchtNochTräger(obst))
-            {
-                if (!trägtNahrung)
-                {
-                    //Neues Ziel
-                    ZielSammeln = obst;
-
-                    //Weitererzählen
-                    SprüheMarkierung((int)Information.ZielNahrung, MarkierungGrößeSammler);
-
-                    //Obst nehmen
-                    GeheZuZiel(obst);
+                else {
+                    //trägt Nahrung
                 }
             }
-            if (Kaste == KasteTypen.Spotter.ToString())
-            {
-                SprüheMarkierung((int)Information.ZielNahrung, MarkierungGrößeSpotter);
-            }*/
         }
 
 		/// <summary>
@@ -254,7 +219,6 @@ namespace AntMe.SmartassAnts
                 Nimm(zucker);
                 trägtNahrung = true;
             }
-            memory.ActionDone(DecisionType.SammelnZucker);
             GeheZuBau();
         }
 
@@ -275,7 +239,6 @@ namespace AntMe.SmartassAnts
                 trägtNahrung = true;
                 
             }
-            memory.ActionDone(DecisionType.SammelnObst);
             GeheZuBau();
         }
 
@@ -397,17 +360,19 @@ namespace AntMe.SmartassAnts
 		/// <param name="ameise">Die nächstgelegen feindliche Ameise.</param>
 		public override void SiehtFeind(Ameise ameise)
 		{
-			
-			//if (FuzzyInferenceSystem.DecisionKillAnt(character.wut, character.energie, character.angreifen, memory.GetDecisionValue(DecisionType.AngreifenAmeise)))
-			if (FuzzyInferenceSystem.Superdecision5x5x2(character.wut, character.energie, character.angreifen, memory.GetDecisionValue(DecisionType.AngreifenAmeise)))
-			{
-				//Hilfe rufen
+            if (!trägtNahrung)
+            {
+                //if (FuzzyInferenceSystem.DecisionKillAnt(character.wut, character.energie, character.angreifen, memory.GetDecisionValue(DecisionType.AngreifenAmeise)))
+                if (FuzzyInferenceSystem.Superdecision5x5x2(character.wut, character.energie, character.angreifen, memory.GetDecisionValue(DecisionType.AngreifenAmeise)))
+                {
+                    //Hilfe rufen
+                    SprüheMarkierung()
 
-				//Angreifen
-				GreifeAn(ameise);
-				memory.ActionDone(DecisionType.AngreifenAmeise);
-			}
-
+                    //Angreifen
+                    GreifeAn(ameise);
+                    memory.ActionDone(DecisionType.AngreifenAmeise);
+                }
+            }
 
 			/*if (Kaste == KasteTypen.Aggro.ToString())
             {

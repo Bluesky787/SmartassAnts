@@ -46,11 +46,16 @@ namespace AntMe.SmartassAnts
 
     class Markers
     {
-        public List<Marker> MarkerList = new List<Marker>();
+        public static List<Marker> MarkerList = new List<Marker>();
 
-        private int markerCounter = 0;
+        private static int markerCounter = 0;
 
-        public int Add(Marker marker)
+        /// <summary>
+        /// Fügt der Datenbank einen neuen Marker hinzu
+        /// </summary>
+        /// <param name="marker">new Marker</param>
+        /// <returns>Marker-ID, für SprüheMarkierung-Funktion</returns>
+        public static int Add(Marker marker)
         {
             marker.id = markerCounter++;
             MarkerList.Add(marker);
@@ -58,7 +63,12 @@ namespace AntMe.SmartassAnts
             return marker.id;
         }
 
-        public Marker Get(int id)
+        /// <summary>
+        /// Ruft einen Marker mit der ID aus der empfangenen Marker-Information ab.
+        /// </summary>
+        /// <param name="id">Die empfangene Marker-Information</param>
+        /// <returns>Marker</returns>
+        public static Marker Get(int id)
         {
             return MarkerList[id];
         }

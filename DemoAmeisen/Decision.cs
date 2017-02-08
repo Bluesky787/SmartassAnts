@@ -7,12 +7,12 @@ namespace AntMe.SmartassAnts
 	public enum DecisionType
 	{
 		Laufen,             //#
-		Wegrennen,
+		Wegrennen,          //#
 		Gruppieren,         //#
 		AngreifenAmeise,    //#
-		AngreifenWanze,
-		SammelnZucker,
-		SammelnObst
+		AngreifenWanze,     //#
+		SammelnZucker,      //#
+		SammelnObst         //#
 	}
 
 	class Decision
