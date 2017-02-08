@@ -123,6 +123,7 @@ namespace AntMe.SmartassAnts
 			parentAnt = Parent;
 
             //Circumstances
+           
             energie = new Energie(CircumstanceType.Energie, parentAnt);
 
 

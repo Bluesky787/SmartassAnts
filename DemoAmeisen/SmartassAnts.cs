@@ -192,8 +192,6 @@ namespace AntMe.SmartassAnts
                     SprüheMarkierung((int)Information.ZielNahrung, MarkierungGrößeSammler);
                     GeheZuZiel(zucker);
                     memory.ActionDone(DecisionType.Laufen);
-                    memory.ActionDone(DecisionType.SammelnZucker);
-
                 }
             }
             else
@@ -211,7 +209,16 @@ namespace AntMe.SmartassAnts
 		{
             if(!trägtNahrung)
             {
-               // if (FuzzyInferenceSystem.Superdecision5x5x2(character.teamfaehigkeit, character.energie, character.laufen, memory.GetDecisionValue(DecisionType.Laufen))
+               if (FuzzyInferenceSystem.Superdecision5x5x2(character.teamfaehigkeit, character.ameisenFreundeInNaehe, character.gruppieren, memory.GetDecisionValue(DecisionType.Gruppieren)) &&
+                    FuzzyInferenceSystem.Superdecision5x5x2(character.faulheit, character.energie, character.sammelnobst, memory.GetDecisionValue(DecisionType.SammelnObst)))
+                {
+                    this.SprüheMarkierung(0, 60);
+                    GeheZuZiel(obst);
+                    memory.ActionDone(DecisionType.Gruppieren);
+                    
+
+                }
+               else { }
             }
 
             /*if (Kaste == KasteTypen.Foodloot.ToString() && BrauchtNochTräger(obst))
@@ -247,7 +254,7 @@ namespace AntMe.SmartassAnts
                 Nimm(zucker);
                 trägtNahrung = true;
             }
-
+            memory.ActionDone(DecisionType.SammelnZucker);
             GeheZuBau();
         }
 
@@ -261,7 +268,16 @@ namespace AntMe.SmartassAnts
             /*Nimm(obst);
             trägtNahrung = true;
             GeheZuBau();*/
-		}
+            if (!trägtNahrung)
+            {
+                //Zucker nehmen
+                Nimm(obst);
+                trägtNahrung = true;
+                
+            }
+            memory.ActionDone(DecisionType.SammelnObst);
+            GeheZuBau();
+        }
 
 		#endregion
 
