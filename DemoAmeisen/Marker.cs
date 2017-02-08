@@ -32,6 +32,7 @@ namespace AntMe.SmartassAnts
         internal MarkerInformationType markerInformation;
         internal MarkerType markerType;
         internal int id;
+        internal int retweet = 0;
 
         public Marker(MarkerType markerType, CoreCoordinate ort)
         {
@@ -88,7 +89,15 @@ namespace AntMe.SmartassAnts
         /// <returns>Marker</returns>
         public static Marker Get(int id)
         {
-            return MarkerList[id];
+            try
+            {
+                return MarkerList[id];
+            }
+            catch (IndexOutOfRangeException)
+            {
+                //unzulässige Markierung, vlt. von anderem Team
+            }
+            return null;
         }
     }
 }

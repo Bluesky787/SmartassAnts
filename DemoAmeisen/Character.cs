@@ -85,6 +85,8 @@ namespace AntMe.SmartassAnts
 	{
 		public Wut(double InitValue)
 		{
+            value = InitValue;
+
 			characterParts = new DotFuzzy.LinguisticVariable("Wut");
 			characterParts.MembershipFunctionCollection.Add(new DotFuzzy.MembershipFunction("Nicht_Wuetend", FuzzyValues[0][0], FuzzyValues[0][1], FuzzyValues[0][2], FuzzyValues[0][3]));
 			characterParts.MembershipFunctionCollection.Add(new DotFuzzy.MembershipFunction("Kaum_Wuetend", FuzzyValues[1][0], FuzzyValues[1][1], FuzzyValues[1][2], FuzzyValues[1][3]));
@@ -92,6 +94,8 @@ namespace AntMe.SmartassAnts
 			characterParts.MembershipFunctionCollection.Add(new DotFuzzy.MembershipFunction("Normal_Wuetend", FuzzyValues[3][0], FuzzyValues[3][1], FuzzyValues[3][2], FuzzyValues[3][3]));
 			characterParts.MembershipFunctionCollection.Add(new DotFuzzy.MembershipFunction("Sehr_Wuetend", FuzzyValues[4][0], FuzzyValues[4][1], FuzzyValues[4][2], FuzzyValues[4][3]));
 		}
+
+
 	}
 
 	class Character
@@ -128,9 +132,9 @@ namespace AntMe.SmartassAnts
             energie = new Energie(CircumstanceType.Energie, parentAnt);
 
             //Character
-            faulheit = new Faulheit(20);
-			wut = new Wut(0.0);
-			teamfaehigkeit = new Teamfaehigkeit(20);
+            faulheit = new Faulheit(80);
+			wut = new Wut(100);
+			teamfaehigkeit = new Teamfaehigkeit(5);
 						
 			//Vereerben
 

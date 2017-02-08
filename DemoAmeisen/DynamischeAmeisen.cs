@@ -184,7 +184,7 @@ namespace AntMe.Spieler.WolfgangGallo
 			if (BrauchtNochTräger(obst))
 			{
 				Nimm(obst);
-				GeheZuBau();
+                GeheZuBau();
 			}
 		}
 
