@@ -77,7 +77,7 @@ namespace AntMe.Simulation {
         /// <summary>
         /// Der X-Wert des Elements.
         /// </summary>
-        public int X {
+        internal int X {
             get { return x; }
             set { x = value; }
         }
@@ -85,7 +85,7 @@ namespace AntMe.Simulation {
         /// <summary>
         /// Der Y-Wert des Elements.
         /// </summary>
-        public int Y {
+        internal int Y {
             get { return y; }
             set { y = value; }
         }

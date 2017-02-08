@@ -311,7 +311,25 @@ namespace AntMe.SmartassAnts
 
                 case Marker.MarkerType.Obst:
                     //das gleiche wie bei siehtObst()
-
+                    if (!trägtNahrung)
+                    {
+                        if (FuzzyInferenceSystem.Superdecision5x5x2(character.faulheit, character.energie, character.sammelnobst, memory.GetDecisionValue(DecisionType.SammelnObst)) && FuzzyInferenceSystem.Superdecision5x5x2(character.teamfaehigkeit, character.ameisenFreundeInNaehe, character.sammelnobst, memory.GetDecisionValue(DecisionType.Gruppieren)))
+                        {
+                            if (marker.markerInformation == Marker.MarkerInformationType.Object)
+                            {
+                                GeheZuZiel(marker.Objekt);
+                                memory.ActionDone(DecisionType.SammelnObst);
+                                memory.ActionDone(DecisionType.Gruppieren);
+                                
+                                //SprüheMarkierung
+                                SprüheMarkierung(Markers.Add(new Marker(Marker.MarkerType.HilfeObst, marker.Objekt)), MarkierungGrößeHilfeLokal);
+                            }
+                        }
+                        else
+                        {
+                            //trägt Nahrung
+                        }
+                    }
                     break;
 
                 case Marker.MarkerType.Zucker:
@@ -321,12 +339,20 @@ namespace AntMe.SmartassAnts
                         if (FuzzyInferenceSystem.Superdecision5x5x2(character.faulheit, character.energie, character.sammelnzucker, memory.GetDecisionValue(DecisionType.SammelnZucker)))
                         {
                             //SprüheMarkierung((int)Information.ZielNahrung, MarkierungGrößeSammler);
-                            //if (marker.markerInformation == Marker.MarkerInformationType.Ort)
-                              // this.DreheInRichtung(marker.ort - )
-                            memory.ActionDone(DecisionType.SammelnZucker);
+                            if (marker.markerInformation == Marker.MarkerInformationType.Object)
+                                GeheZuZiel(marker.Objekt);
 
-                            //SprüheMarkierung
-                            SprüheMarkierung(Markers.Add(new Marker(Marker.MarkerType.Zucker, CoordinateBase)), MarkierungGrößeInformation);
+                            if (marker.markerInformation == Marker.MarkerInformationType.Richtung)
+                            {
+                                DreheInRichtung(marker.richtung);
+                                GeheGeradeaus();
+
+
+                                memory.ActionDone(DecisionType.SammelnZucker);
+
+                                //SprüheMarkierung
+                                SprüheMarkierung(Markers.Add(new Marker(Marker.MarkerType.Zucker, marker.Objekt)), MarkierungGrößeInformation);
+                            }
                         }
                     }
                     else
