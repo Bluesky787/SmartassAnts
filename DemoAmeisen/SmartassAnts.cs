@@ -80,6 +80,7 @@ namespace AntMe.SmartassAnts
 		readonly int MarkierungGrößeJäger = 50;
 
 		Character character;
+
 		Memory memory = new Memory();
 
 		Nahrung ZielSammeln;
@@ -133,6 +134,7 @@ namespace AntMe.SmartassAnts
 				GeheGeradeaus();
 				memory.ActionDone(DecisionType.Laufen);
 				//Ziel?
+                
 			}
 			else
             {
@@ -288,26 +290,27 @@ namespace AntMe.SmartassAnts
 		/// <param name="ameise">Die nächstgelegene befreundete Ameise.</param>
 		public override void SiehtFreund(Ameise ameise)
 		{
-			if (this.Ziel != null)
-			{
-				//nicht gruppieren
-			}
-			else
-			{
-				//grupperen entscheiden
-				if (FuzzyInferenceSystem.Superdecision5x5x2(character.teamfaehigkeit, character.energie, character.gruppieren, memory.GetDecisionValue(DecisionType.Gruppieren)))
-				{
-					this.SprüheMarkierung(0, 10);
-					this.GeheZuZiel(ameise);
-					memory.ActionDone(DecisionType.Gruppieren);
-				}
-				else
-				{
-					//nicht gruppieren
-				}
-			}
-
-
+            if (!(this.EntfernungZuBau == 0))
+            {
+                if (this.Ziel != null)
+                {
+                    //nicht gruppieren
+                }
+                else
+                {
+                    //grupperen entscheiden
+                    if (FuzzyInferenceSystem.Superdecision5x5x2(character.teamfaehigkeit, character.energie, character.gruppieren, memory.GetDecisionValue(DecisionType.Gruppieren)))
+                    {
+                        this.SprüheMarkierung(0, 10);
+                        this.GeheZuZiel(ameise);
+                        memory.ActionDone(DecisionType.Gruppieren);
+                    }
+                    else
+                    {
+                        //nicht gruppieren
+                    }
+                }
+            }
 		}
 
 		/// <summary>
@@ -329,22 +332,21 @@ namespace AntMe.SmartassAnts
 		/// <param name="wanze">Die nächstgelegene Wanze.</param>
 		public override void SiehtFeind(Wanze wanze)
 		{
-			/*
-            if (Kaste == KasteTypen.Aggro.ToString())
+			if (FuzzyInferenceSystem.Superdecision5x5x2(character.wut, character.energie, character.angreifen, memory.GetDecisionValue(DecisionType.AngreifenWanze)) && FuzzyInferenceSystem.Superdecision5x5x2(character.wut, character.ameisenFreundeInNaehe, character.angreifen, memory.GetDecisionValue(DecisionType.AngreifenWanze)))
             {
-                //Neues Ziel
-                ZielGegner = wanze;
+                //hilfe rufen
+                this.SprüheMarkierung(0, 100);
 
-                //Weitererzählen
-                SprüheMarkierung((int)Information.ZielGegner, MarkierungGrößeJäger);
-
-                GreifeAn(wanze);
-                greiftAn = true;
+                //angreifen
+                this.GreifeAn(wanze);
+                memory.ActionDone(DecisionType.AngreifenWanze);
             }
-            if (Kaste == KasteTypen.Spotter.ToString())
+            else
             {
-                SprüheMarkierung((int)Information.ZielGegner, MarkierungGrößeSpotter);
-            }*/
+                //wegrennen
+                this.GeheZuBau();
+                memory.ActionDone(DecisionType.Wegrennen);
+            }
         }
 
 		/// <summary>

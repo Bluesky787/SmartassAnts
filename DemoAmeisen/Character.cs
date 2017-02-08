@@ -96,9 +96,11 @@ namespace AntMe.SmartassAnts
 
 	class Character
     {
-		//Circumstances
-		internal Energie energie;
-
+        //Circumstances
+        internal AmeisenFeindeInNaehe ameisenFeindeInNaehe;
+        internal AmeisenFreundeInNaehe ameisenFreundeInNaehe;
+        internal Energie energie;
+        
 		//CharacterTypes
 		internal Faulheit faulheit;
         internal Wut wut;
@@ -118,8 +120,11 @@ namespace AntMe.SmartassAnts
 			//Init
 			parentAnt = Parent;
 
-			faulheit = new Faulheit(20);
-			energie = new Energie(CircumstanceType.Energie, parentAnt);
+            //Circumstances
+            energie = new Energie(CircumstanceType.Energie, parentAnt);
+
+
+            faulheit = new Faulheit(20);
 			wut = new Wut(0.0);
 			teamfaehigkeit = new Teamfaehigkeit(20);
 						
