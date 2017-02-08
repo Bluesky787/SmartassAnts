@@ -108,6 +108,8 @@ namespace AntMe.SmartassAnts
 		internal Decision laufen = new Decision(DecisionType.Laufen, "Steht", "Laeuft", true);
 		internal Decision angreifen = new Decision(DecisionType.AngreifenAmeise, "Greift_nicht_an", "Greift_an", true);
 		internal Decision gruppieren = new Decision(DecisionType.Gruppieren, "Nicht_gruppieren", "Gruppieren", true);
+        internal Decision sammelnzucker = new Decision(DecisionType.SammelnZucker, "Nicht_sammeln", "Sammeln", true);
+        internal Decision sammelnobst = new Decision(DecisionType.SammelnObst, "Obst_nicht_sammeln", "Obst_sammeln", true);
 
 		internal Basisameise parentAnt;
 

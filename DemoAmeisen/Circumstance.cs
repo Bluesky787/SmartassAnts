@@ -11,7 +11,6 @@ namespace AntMe.SmartassAnts
 		AmeisenFreundeInNähe,
 		AmeisenFeindeInNähe,
 		Energie,
-		KäferInNähe,
 		Punktzahl
 	}
 
@@ -137,4 +136,6 @@ namespace AntMe.SmartassAnts
 			}
 		}
 	}
+
+    
 }

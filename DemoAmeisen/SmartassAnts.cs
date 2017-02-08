@@ -164,7 +164,7 @@ namespace AntMe.SmartassAnts
 		/// </summary>
 		/// <param name="zucker">Der nächstgelegene Zuckerhaufen.</param>
 		public override void Sieht(Zucker zucker)
-		{            
+		{
             /*if (Kaste == KasteTypen.Foodloot.ToString()) {
                 if (!trägtNahrung)
                 {
@@ -180,15 +180,38 @@ namespace AntMe.SmartassAnts
             if (Kaste == KasteTypen.Spotter.ToString()) {
                 SprüheMarkierung((int)Information.ZielNahrung, MarkierungGrößeSpotter);
             }*/
-		}
 
-		/// <summary>
-		/// Wird wiederholt aufgerufen, wenn die Ameise mindstens ein
-		/// Obststück sieht.
-		/// </summary>
-		/// <param name="obst">Das nächstgelegene Obststück.</param>
-		public override void Sieht(Obst obst)
+            if (!trägtNahrung)
+            {
+
+                if (FuzzyInferenceSystem.Superdecision5x5x2(character.faulheit, character.energie, character.laufen, memory.GetDecisionValue(DecisionType.Laufen)) &&
+                    FuzzyInferenceSystem.Superdecision5x5x2(character.faulheit, character.energie, character.sammelnzucker, memory.GetDecisionValue(DecisionType.SammelnZucker)))
+                {
+                    SprüheMarkierung((int)Information.ZielNahrung, MarkierungGrößeSammler);
+                    GeheZuZiel(zucker);
+                    memory.ActionDone(DecisionType.Laufen);
+                    memory.ActionDone(DecisionType.SammelnZucker);
+
+                }
+            }
+            else
+            {
+                //traegt Nahrung
+            }
+        }
+
+        /// <summary>
+        /// Wird wiederholt aufgerufen, wenn die Ameise mindstens ein
+        /// Obststück sieht.
+        /// </summary>
+        /// <param name="obst">Das nächstgelegene Obststück.</param>
+        public override void Sieht(Obst obst)
 		{
+            if(!trägtNahrung)
+            {
+               // if (FuzzyInferenceSystem.Superdecision5x5x2(character.teamfaehigkeit, character.energie, character.laufen, memory.GetDecisionValue(DecisionType.Laufen))
+            }
+
             /*if (Kaste == KasteTypen.Foodloot.ToString() && BrauchtNochTräger(obst))
             {
                 if (!trägtNahrung)
@@ -215,13 +238,15 @@ namespace AntMe.SmartassAnts
 		/// </summary>
 		/// <param name="zucker">Der Zuckerhaufen.</param>
 		public override void ZielErreicht(Zucker zucker)
-        { 
-			/*
-            //Zucker nehmen
-            Nimm(zucker);
-            trägtNahrung = true;
+        {
+            if (!trägtNahrung)
+            {
+                //Zucker nehmen
+                Nimm(zucker);
+                trägtNahrung = true;
+            }
+
             GeheZuBau();
-			*/
         }
 
 		/// <summary>
