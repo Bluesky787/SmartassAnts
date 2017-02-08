@@ -73,9 +73,14 @@ namespace AntMe.SmartassAnts
 
 	public class MeineAmeise : Basisameise
 	{
-		#region Character
+        #region Character
 
-		readonly int MarkierungGrößeSpotter = 100;
+        //readonly int MarkierungGrößeSpotter = 100;
+
+        /// <summary>
+        /// FÜr Ameisenstraßen.
+        /// </summary>
+        readonly int MarkierungGrößeAmeisenstraße = 10;
 
         /// <summary>
         /// Bei Gefahr im Verzug.
@@ -86,8 +91,14 @@ namespace AntMe.SmartassAnts
         /// Bei keiner direkten Gefahrenlage.
         /// </summary>
         readonly int MarkierungGrößeHilfeLokal = 20;
-		readonly int MarkierungGrößeSammler = 50;
-		readonly int MarkierungGrößeJäger = 50;
+
+        /// <summary>
+        /// Verrät Position interessanter Objekte.
+        /// </summary>
+        readonly int MarkierungGrößeInformation = 50;
+
+		//readonly int MarkierungGrößeSammler = 50;
+		//readonly int MarkierungGrößeJäger = 50;
 
 		Character character;
 
@@ -181,9 +192,12 @@ namespace AntMe.SmartassAnts
             {
                 if (FuzzyInferenceSystem.Superdecision5x5x2(character.faulheit, character.energie, character.sammelnzucker, memory.GetDecisionValue(DecisionType.SammelnZucker)))
                 {
-                    SprüheMarkierung((int)Information.ZielNahrung, MarkierungGrößeSammler);
+                    //SprüheMarkierung((int)Information.ZielNahrung, MarkierungGrößeSammler);
                     GeheZuZiel(zucker);
                     memory.ActionDone(DecisionType.SammelnZucker);
+
+                    //SprüheMarkierung
+                    SprüheMarkierung(Markers.Add(new Marker(Marker.MarkerType.Zucker, CoordinateBase)), MarkierungGrößeInformation);
                 }
             }
             else
@@ -201,14 +215,14 @@ namespace AntMe.SmartassAnts
 		{
             if(!trägtNahrung)
             {
-               if (FuzzyInferenceSystem.Superdecision5x5x2(character.teamfaehigkeit, character.ameisenFreundeInNaehe, character.gruppieren, memory.GetDecisionValue(DecisionType.Gruppieren)) &&
-                    FuzzyInferenceSystem.Superdecision5x5x2(character.faulheit, character.energie, character.sammelnobst, memory.GetDecisionValue(DecisionType.SammelnObst)))
+               if (FuzzyInferenceSystem.Superdecision5x5x2(character.faulheit, character.energie, character.sammelnobst, memory.GetDecisionValue(DecisionType.SammelnObst)) && FuzzyInferenceSystem.Superdecision5x5x2(character.teamfaehigkeit, character.ameisenFreundeInNaehe, character.sammelnobst, memory.GetDecisionValue(DecisionType.Gruppieren)))
                 {
-                    this.SprüheMarkierung(0, 60);
                     GeheZuZiel(obst);
+                    memory.ActionDone(DecisionType.SammelnObst);
                     memory.ActionDone(DecisionType.Gruppieren);
-                    
 
+                    //SprüheMarkierung
+                    SprüheMarkierung(Markers.Add(new Marker(Marker.MarkerType.HilfeObst, CoordinateBase)), MarkierungGrößeHilfeLokal);
                 }
                 else {
                     //trägt Nahrung
@@ -228,6 +242,8 @@ namespace AntMe.SmartassAnts
                 //Zucker nehmen
                 Nimm(zucker);
                 trägtNahrung = true;
+
+                SprüheMarkierung(Markers.Add(new Marker(Marker.MarkerType.Zucker, CoordinateBase)), MarkierungGrößeInformation);
             }
             GeheZuBau();
         }
@@ -247,7 +263,7 @@ namespace AntMe.SmartassAnts
                 //Zucker nehmen
                 Nimm(obst);
                 trägtNahrung = true;
-                
+                SprüheMarkierung(Markers.Add(new Marker(Marker.MarkerType.Obst, CoordinateBase)), MarkierungGrößeInformation);
             }
             GeheZuBau();
         }
@@ -255,13 +271,6 @@ namespace AntMe.SmartassAnts
 		#endregion
 
 		#region Kommunikation
-
-        enum Information
-        {
-            ZielGegner,
-            ZielNahrung,
-            Hilfe
-        }
 
 		/// <summary>
 		/// Wird einmal aufgerufen, wenn die Ameise eine Markierung des selben
@@ -271,6 +280,54 @@ namespace AntMe.SmartassAnts
 		/// <param name="markierung">Die nächste neue Markierung.</param>
 		public override void RiechtFreund(Markierung markierung)
 		{
+            Marker marker = Markers.Get(markierung.Information);
+            switch (marker.markerType)
+            {
+                case Marker.MarkerType.Hilfe:
+                    //Ameise in Gefahr!
+                    //Hilfsbereitschaft, Teamfähigkeit prüfen
+                    //Nahrung fallen lassen
+                    //helfen
+                    break;
+
+                case Marker.MarkerType.HilfeAmeise:
+                    //Hilfsbereitschaft, Teamfähigkeit prüfen
+                    //Nahrung fallen lassen
+                    //helfen
+                    break;
+
+                case Marker.MarkerType.HilfeObst:
+                    //Hilfsbereitschaft, Teamfähigkeit prüfen
+                    //nur wenn keine eigene Nahrung
+                    //helfen
+                    break;
+
+                case Marker.MarkerType.HilfeWanze:
+                    //Hilfsbereitschaft, Teamfähigkeit prüfen
+                    //Anzahl Freunde prüfen
+                    //Nahrung fallen lassen
+                    //helfen
+                    break;
+
+                case Marker.MarkerType.Obst:
+                    //das gleiche wie bei siehtObst()
+                    break;
+
+                case Marker.MarkerType.Zucker:
+                    //das Gleiche wie bei siehtZucker()
+                    break;
+
+                default:
+                    //damit Ameisen nicht stehen bleiben
+                    if (Ziel != null)
+                    {
+                        GeheZuZiel(Ziel);
+                    }
+                    break;
+            }
+
+            
+
 			/*
             switch(markierung.Information)
             {
@@ -433,7 +490,26 @@ namespace AntMe.SmartassAnts
 		/// </summary>
 		public override void Tick()
 		{
+            //Richtung zum Bau beibehalten
+            if (trägtNahrung)
+            {
+                GeheZuBau();
 
+                //Ameisenstraße
+                //nur, wenn sie Zucker trägt
+                if (GetragenesObst == null)
+                {
+                    SprüheMarkierung(Markers.Add(new SmartassAnts.Marker(Marker.MarkerType.Zucker, (Richtung + 180) % 360)), MarkierungGrößeAmeisenstraße);
+                }
+                else
+                {
+                    //Apfelhelfer
+                    if (BrauchtNochTräger(GetragenesObst))
+                    {
+                        SprüheMarkierung(Markers.Add(new SmartassAnts.Marker(Marker.MarkerType.HilfeObst, CoordinateBase)), MarkierungGrößeHilfeLokal);
+                    }
+                }
+            }
 		}
 
 		#endregion
