@@ -283,39 +283,59 @@ namespace AntMe.SmartassAnts
             Marker marker = Markers.Get(markierung.Information);
             switch (marker.markerType)
             {
-                case Marker.MarkerType.Hilfe:
-                    //Ameise in Gefahr!
-                    //Hilfsbereitschaft, Teamfähigkeit prüfen
-                    //Nahrung fallen lassen
-                    //helfen
-                   
-                        break;
-
                 case Marker.MarkerType.HilfeAmeise:
                     //Hilfsbereitschaft, Teamfähigkeit prüfen
                     //Nahrung fallen lassen
                     //helfen
-                    if (!trägtNahrung)
-                    {
+                    
                         if (FuzzyInferenceSystem.Superdecision5x5x2(character.teamfaehigkeit, character.ameisenFreundeInNaehe, character.angreifen, memory.GetDecisionValue(DecisionType.AngreifenAmeise)))
                         {
-                            //GreifAn
-                            memory.ActionDone(DecisionType.AngreifenAmeise);
+                            if (marker.markerInformation == Marker.MarkerInformationType.Insekt)
+                            {
+                                LasseNahrungFallen();
+                                GreifeAn(marker.Insekt);
+                                memory.ActionDone(DecisionType.AngreifenAmeise);
+                            }
                         }
-                    }
+                    
                     break;
 
                 case Marker.MarkerType.HilfeObst:
                     //Hilfsbereitschaft, Teamfähigkeit prüfen
                     //nur wenn keine eigene Nahrung
                     //helfen
-                    break;
+                    if (!trägtNahrung)
+                    {
+                        if (FuzzyInferenceSystem.Superdecision5x5x2(character.faulheit, character.energie, character.sammelnobst, memory.GetDecisionValue(DecisionType.SammelnObst)) && FuzzyInferenceSystem.Superdecision5x5x2(character.teamfaehigkeit, character.ameisenFreundeInNaehe, character.sammelnobst, memory.GetDecisionValue(DecisionType.Gruppieren)))
+                        {
+                            if (marker.markerInformation == Marker.MarkerInformationType.Object)
+                            {
+                                GeheZuZiel(marker.Objekt);
+
+                                memory.ActionDone(DecisionType.SammelnObst);
+                                memory.ActionDone(DecisionType.Gruppieren);
+                                SprüheMarkierung(Markers.Add(new Marker(Marker.MarkerType.Obst, marker.Objekt)), MarkierungGrößeHilfeLokal);
+                            }
+                        }
+                    }
+                            break;
 
                 case Marker.MarkerType.HilfeWanze:
                     //Hilfsbereitschaft, Teamfähigkeit prüfen
                     //Anzahl Freunde prüfen
                     //Nahrung fallen lassen
                     //helfen
+                    if (FuzzyInferenceSystem.Superdecision5x5x2(character.teamfaehigkeit, character.ameisenFeindeInNaehe, character.angreifen, memory.GetDecisionValue(DecisionType.AngreifenWanze)))
+                    {
+                        if (marker.markerInformation == Marker.MarkerInformationType.Insekt)
+                        {
+                            LasseNahrungFallen();
+                            GreifeAn(marker.Insekt);
+                            memory.ActionDone(DecisionType.AngreifenWanze);
+                            SprüheMarkierung(Markers.Add(new Marker(Marker.MarkerType.HilfeWanze, marker.Insekt)), MarkierungGrößeHilfeLokal);
+                        }
+                    }
+
                     break;
 
                 case Marker.MarkerType.Obst:

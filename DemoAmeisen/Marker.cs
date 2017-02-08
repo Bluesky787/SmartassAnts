@@ -10,7 +10,6 @@ namespace AntMe.SmartassAnts
     {
         public enum MarkerType
         {
-            Hilfe,          //wenn Ameise angegriffen wird
             HilfeAmeise,    //wenn Ameise eine andere Ameise angreifen möchte
             HilfeObst,      //wenn Ameise Obst sammeln möchte
             HilfeWanze,     //wenn Ameise Wanze angreifen möchte
