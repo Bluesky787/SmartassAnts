@@ -288,12 +288,21 @@ namespace AntMe.SmartassAnts
                     //Hilfsbereitschaft, Teamfähigkeit prüfen
                     //Nahrung fallen lassen
                     //helfen
-                    break;
+                   
+                        break;
 
                 case Marker.MarkerType.HilfeAmeise:
                     //Hilfsbereitschaft, Teamfähigkeit prüfen
                     //Nahrung fallen lassen
                     //helfen
+                    if (!trägtNahrung)
+                    {
+                        if (FuzzyInferenceSystem.Superdecision5x5x2(character.teamfaehigkeit, character.ameisenFreundeInNaehe, character.angreifen, memory.GetDecisionValue(DecisionType.AngreifenAmeise)))
+                        {
+                            //GreifAn
+                            memory.ActionDone(DecisionType.AngreifenAmeise);
+                        }
+                    }
                     break;
 
                 case Marker.MarkerType.HilfeObst:
