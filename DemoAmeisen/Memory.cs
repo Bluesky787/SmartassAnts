@@ -29,66 +29,71 @@ namespace AntMe.SmartassAnts
 
 		public void ActionSuccessful()
 		{
-			foreach (DecisionType d in lastActions)
-			{
-				switch (d)
-				{
-					case DecisionType.AngreifenAmeise:
-						ratingAngreifenAmeise = Math.Min(ratingAngreifenAmeise + learneffect, 1.0);
-						break;
-					case DecisionType.AngreifenWanze:
-						ratingAngreifenWanze= Math.Min(ratingAngreifenWanze + learneffect, 1.0);
-						break;
-					case DecisionType.Laufen:
-						ratingLaufen = Math.Min(ratingLaufen + learneffect, 1.0); ;
-						break;
-					case DecisionType.SammelnObst:
-						ratingSammelnObst = Math.Min(ratingSammelnObst + learneffect, 1.0); ;
-						break;
-					case DecisionType.SammelnZucker:
-						ratingSammelnZucker = Math.Min(ratingSammelnZucker + learneffect, 1.0); ;
-						break;
-					case DecisionType.Wegrennen:
-						ratingWegrennen = Math.Min(ratingWegrennen + learneffect, 1.0); ;
-						break;
-					deNormal_Fault:
-						break;
+            if (lastActions != null && lastActions.Count != 0)
+            {
+                foreach (DecisionType d in lastActions)
+                {
+                    switch (d)
+                    {
+                        case DecisionType.AngreifenAmeise:
+                            ratingAngreifenAmeise = Math.Min(ratingAngreifenAmeise + learneffect, 1.0);
+                            break;
+                        case DecisionType.AngreifenWanze:
+                            ratingAngreifenWanze = Math.Min(ratingAngreifenWanze + learneffect, 1.0);
+                            break;
+                        case DecisionType.Laufen:
+                            ratingLaufen = Math.Min(ratingLaufen + learneffect, 1.0); ;
+                            break;
+                        case DecisionType.SammelnObst:
+                            ratingSammelnObst = Math.Min(ratingSammelnObst + learneffect, 1.0); ;
+                            break;
+                        case DecisionType.SammelnZucker:
+                            ratingSammelnZucker = Math.Min(ratingSammelnZucker + learneffect, 1.0); ;
+                            break;
+                        case DecisionType.Wegrennen:
+                            ratingWegrennen = Math.Min(ratingWegrennen + learneffect, 1.0); ;
+                            break;
+                        deNormal_Fault:
+                            break;
 
-				}
-			}
-			lastActions.Clear();
+                    }
+                }
+                lastActions.Clear();
+            }
 		}
 
 		public void ActionUnsuccessful()
 		{
-			foreach (DecisionType d in lastActions)
-			{
-				switch (d)
-				{
-					case DecisionType.AngreifenAmeise:
-						ratingAngreifenAmeise = Math.Max(ratingAngreifenAmeise - learneffect, 0.0); 
-						break;
-					case DecisionType.AngreifenWanze:
-						ratingAngreifenWanze = Math.Max(ratingAngreifenWanze - learneffect, 0.0); ;
-						break;
-					case DecisionType.Laufen:
-						ratingLaufen = Math.Max(ratingLaufen - learneffect, 0.0); ;
-						break;
-					case DecisionType.SammelnObst:
-						ratingSammelnObst = Math.Max(ratingSammelnObst - learneffect, 0.0); ;
-						break;
-					case DecisionType.SammelnZucker:
-						ratingSammelnZucker = Math.Max(ratingSammelnZucker - learneffect, 0.0); ;
-						break;
-					case DecisionType.Wegrennen:
-						ratingWegrennen = Math.Max(ratingWegrennen - learneffect, 0.0); ;
-						break;
-					deNormal_Fault:
-						break;
-
-				}
-			}
-			lastActions.Clear();
+            if (lastActions != null && lastActions.Count != 0)
+            {
+                foreach (DecisionType d in lastActions)
+                {
+                    switch (d)
+                    {
+                        case DecisionType.AngreifenAmeise:
+                            ratingAngreifenAmeise = Math.Max(ratingAngreifenAmeise - learneffect, 0.0);
+                            break;
+                        case DecisionType.AngreifenWanze:
+                            ratingAngreifenWanze = Math.Max(ratingAngreifenWanze - learneffect, 0.0); ;
+                            break;
+                        case DecisionType.Laufen:
+                            ratingLaufen = Math.Max(ratingLaufen - learneffect, 0.0); ;
+                            break;
+                        case DecisionType.SammelnObst:
+                            ratingSammelnObst = Math.Max(ratingSammelnObst - learneffect, 0.0); ;
+                            break;
+                        case DecisionType.SammelnZucker:
+                            ratingSammelnZucker = Math.Max(ratingSammelnZucker - learneffect, 0.0); ;
+                            break;
+                        case DecisionType.Wegrennen:
+                            ratingWegrennen = Math.Max(ratingWegrennen - learneffect, 0.0); ;
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                lastActions.Clear();
+            }
 		}
 
 		public double GetDecisionValue(DecisionType Decision)
