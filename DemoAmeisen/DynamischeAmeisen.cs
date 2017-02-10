@@ -222,7 +222,7 @@ namespace AntMe.Spieler.WolfgangGallo
 		{
 			SprüheMarkierung(0, 60);
 
-			if (Kaste.Substring(0, 7) == "Krieger" && Ziel == null)
+			if (Kaste.Substring(0, 7) == "Krieger" && Ziel == null) 
 				GreifeAn(wanze);
 		}
 

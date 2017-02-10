@@ -7,11 +7,12 @@ namespace AntMe.SmartassAnts
 	class Memory
 	{
 		private List<DecisionType> lastActions;
-		private double ratingLaufen, ratingWegrennen, ratingAngreifenAmeise, ratingAngreifenWanze, ratingSammelnZucker, ratingSammelnObst;
+		private static double ratingLaufen, ratingWegrennen, ratingAngreifenAmeise, ratingAngreifenWanze, ratingSammelnZucker, ratingSammelnObst;
+        private MeineAmeise parentAnt;
 
 		double learneffect = 0.1;
 
-		public Memory()
+		public Memory(MeineAmeise ParentAnt)
 		{
 			lastActions = new List<DecisionType>();
 			ratingLaufen = 0.50;
@@ -20,6 +21,8 @@ namespace AntMe.SmartassAnts
 			ratingAngreifenWanze = 0.50;
 			ratingSammelnZucker = 0.50;
 			ratingSammelnObst = 0.50;
+
+            this.parentAnt = ParentAnt;
 		}
 		
 		public void ActionDone(DecisionType Decision)
