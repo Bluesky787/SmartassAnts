@@ -53,7 +53,7 @@ namespace AntMe.SmartassAnts
                         case DecisionType.Wegrennen:
                             ratingWegrennen = Math.Min(ratingWegrennen + learneffect, 1.0); ;
                             break;
-                        deNormal_Fault:
+                        default:
                             break;
 
                     }
