@@ -154,13 +154,16 @@ namespace AntMe.SmartassAnts
 			{
 				GeheGeradeaus();
 				memory.ActionDone(DecisionType.Laufen);
+                
 				//Ziel?
                 
 			}
 			else
             {
-				//weiter stehen bleiben
-				//this.BleibStehen();
+                //weiter stehen bleiben
+                //this.BleibStehen();
+
+                
 			}
 		}
 
@@ -171,6 +174,7 @@ namespace AntMe.SmartassAnts
 		public override void WirdMüde()
 		{
             GeheZuBau();
+            
 		}
 
         #endregion
@@ -203,6 +207,7 @@ namespace AntMe.SmartassAnts
             else
             {
                 //traegt Nahrung
+                GeheZuBau();
             }
         }
 
@@ -226,6 +231,8 @@ namespace AntMe.SmartassAnts
                 }
                 else {
                     //trägt Nahrung
+                    GeheZuBau();
+                    
                 }
             }
         }
@@ -295,6 +302,7 @@ namespace AntMe.SmartassAnts
                                 LasseNahrungFallen();
                                 GreifeAn(marker.Insekt);
                                 memory.ActionDone(DecisionType.AngreifenAmeise);
+                            
                             }
                         }
                     
