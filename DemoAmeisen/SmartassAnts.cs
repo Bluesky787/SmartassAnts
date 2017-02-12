@@ -111,7 +111,9 @@ namespace AntMe.SmartassAnts
 
         internal Memory memory;
 
-		#endregion
+        #endregion
+
+        int waitforframe = 0, currentFrame = 0;
 		public MeineAmeise()
 		{
             memory = new Memory(this);
@@ -154,6 +156,10 @@ namespace AntMe.SmartassAnts
 		/// </summary>
 		public override void Wartet()
 		{
+            if(currentFrame <= waitforframe)
+            {
+                return;
+            }
             //Hat die Ameise etwas gemacht?
             if (greiftAn)
             {
@@ -414,8 +420,8 @@ namespace AntMe.SmartassAnts
                             else
                             {
                                 //kein Bock
-                                Weitermachen();
-                            }
+                                WaitUntil(50);
+                           }
                         }
                         else
                             Weitermachen();
@@ -606,9 +612,21 @@ namespace AntMe.SmartassAnts
 			*/
             //Entscheidung Angreifen
             //Wenn negativ, Entscheidung wegrennen
-            memory.ActionUnsuccessful();
-
-            Weitermachen();
+            if (FuzzyInferenceSystem.Superdecision5x5x2(character.energie, character.ameisenFreundeInNaehe, character.angreifen, memory.GetDecisionValue(1-DecisionType.Wegrennen))) //beeinflusst Entscheidung zum Angriff negativ
+            {
+                GreifeAn(wanze);
+                greiftAn = true;
+               memory.ActionDone(DecisionType.AngreifenWanze);
+                
+            }
+            else
+            {
+                LasseNahrungFallen();
+                trägtNahrung = false;
+                memory.ActionDone(DecisionType.Wegrennen);
+                GeheZuBau();
+            }
+         
 		}
 
 		/// <summary>
@@ -648,6 +666,7 @@ namespace AntMe.SmartassAnts
 		/// </summary>
 		public override void Tick()
 		{
+            currentFrame++;
             //Richtung zum Bau beibehalten
             if (trägtNahrung)
             {
@@ -711,8 +730,15 @@ namespace AntMe.SmartassAnts
                 else
                 {
                     //kein Bock
+                    WaitUntil(50);
                 }
             }
+        }
+
+        public void WaitUntil(int numFrames)
+        {
+            waitforframe = currentFrame + numFrames;
+            
         }
 
 		#endregion
