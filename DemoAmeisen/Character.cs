@@ -132,7 +132,7 @@ namespace AntMe.SmartassAnts
             energie = new Energie(CircumstanceType.Energie, parentAnt);
 
             //Character
-            faulheit = new Faulheit(10);
+            faulheit = new Faulheit(0);
 			wut = new Wut(50);
 			teamfaehigkeit = new Teamfaehigkeit(50);
 						

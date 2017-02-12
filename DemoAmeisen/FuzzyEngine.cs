@@ -135,7 +135,7 @@ namespace AntMe.SmartassAnts
 
 			//Allgemeine Regel: C1_x AND C2_y → z_1, wenn y = 5-x;   x,y = [0..4]
 			//Greift keine Regel → Standardwert (nicht von DotFuzzy unterstützt)
-			for (int x = 4; x >= 1; x--)
+			for (int x = 4; x >= 0; x--)
 			{
 				for (int y = x; y < 5; y++)
 				{
@@ -157,7 +157,7 @@ namespace AntMe.SmartassAnts
 			{
 
 				//Gedächtnis einbeziehen (wie gut war die Entscheidung beim letzten Mal?)
-				defuzzedValue += ratingAction;
+				defuzzedValue += ratingAction * 100;
 				defuzzedValue /= 2.0;
 
 				return generateDecision(defuzzedValue);

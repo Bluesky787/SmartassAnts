@@ -179,8 +179,26 @@ namespace AntMe.SmartassAnts
                 memory.ActionSuccessful();
             }
 
-
-            Weitermachen();
+            if (EntfernungZuBau == 0)
+            {
+                //Entscheiden, ob letzter Zucker gesucht werden soll
+                if (FuzzyInferenceSystem.Superdecision5x5x2(character.faulheit, character.energie, character.sammelnzucker, memory.GetDecisionValue(DecisionType.SammelnZucker)))
+                {
+                    //Zucker sammeln
+                    GeheZuZiel(Memory.gemerkterZucker);
+                    memory.ActionDone(DecisionType.Laufen);
+                    memory.ActionDone(DecisionType.SammelnZucker);
+                }
+                else
+                {
+                    //Entscheiden, ob die Ameise laufen soll
+                    Weitermachen();
+                }
+            }
+            else
+            {
+                Weitermachen();
+            }
         }
 
 		/// <summary>
@@ -206,7 +224,22 @@ namespace AntMe.SmartassAnts
 		/// </summary>
 		/// <param name="zucker">Der nächstgelegene Zuckerhaufen.</param>
 		public override void Sieht(Zucker zucker)
-		{
+        {
+            if (Memory.gemerkterZucker == null)
+            {
+                Memory.gemerkterZucker = zucker;
+            }
+            else
+            {
+                //aktueller Zucker näher ran? -> in ZielErreicht(zucker) prüfen
+                //aktueller Zucker voller?
+                //-> neuen Zucker merken
+                if (zucker.Menge > Memory.gemerkterZucker.Menge)
+                {
+                    Memory.gemerkterZucker = zucker;
+                }
+            }
+
             if (!trägtNahrung)
             {
                 if (FuzzyInferenceSystem.Superdecision5x5x2(character.faulheit, character.energie, character.sammelnzucker, memory.GetDecisionValue(DecisionType.SammelnZucker)))
@@ -264,6 +297,12 @@ namespace AntMe.SmartassAnts
 		/// <param name="zucker">Der Zuckerhaufen.</param>
 		public override void ZielErreicht(Zucker zucker)
         {
+            //Zucker näher ran als gemerkter Zucker der Kollonie?
+            if (EntfernungZuBau < Memory.gemerkterZucker_EntfernungZuBau)
+            {
+                Memory.gemerkterZucker = zucker;
+            }
+
             if (!trägtNahrung)
             {
                 //Zucker nehmen
@@ -420,6 +459,7 @@ namespace AntMe.SmartassAnts
                             else
                             {
                                 //kein Bock
+                                BleibStehen();
                                 WaitUntil(50);
                            }
                         }
@@ -584,6 +624,7 @@ namespace AntMe.SmartassAnts
                     if (trägtNahrung)
                     {
                         LasseNahrungFallen();
+                        trägtNahrung = false;
                     }
 
                     //Angreifen
@@ -612,7 +653,7 @@ namespace AntMe.SmartassAnts
 			*/
             //Entscheidung Angreifen
             //Wenn negativ, Entscheidung wegrennen
-            if (FuzzyInferenceSystem.Superdecision5x5x2(character.energie, character.ameisenFreundeInNaehe, character.angreifen, memory.GetDecisionValue(1-DecisionType.Wegrennen))) //beeinflusst Entscheidung zum Angriff negativ
+            if (FuzzyInferenceSystem.Superdecision5x5x2(character.wut, character.ameisenFreundeInNaehe, character.angreifen, memory.GetDecisionValue(1-DecisionType.Wegrennen))) //beeinflusst Entscheidung zum Angriff negativ
             {
                 GreifeAn(wanze);
                 greiftAn = true;
@@ -667,9 +708,17 @@ namespace AntMe.SmartassAnts
 		public override void Tick()
 		{
             currentFrame++;
-            //Richtung zum Bau beibehalten
+
+            //GeheGeradeaus() unterbrechen
+            if (currentFrame % 50 == 0 && Ziel == null)
+            {
+                //BleibStehen(); //Nicht benötigt, ist in Weitermachen() enthalten
+                Weitermachen();
+            }
+
             if (trägtNahrung)
             {
+                //Richtung zum Bau beibehalten
                 GeheZuBau();
 
                 //Ameisenstraße
@@ -693,7 +742,7 @@ namespace AntMe.SmartassAnts
             else
                 Weitermachen();
 
-            if (Ziel == null || EntfernungZuBau == 0)
+            if (Ziel == null || EntfernungZuBau < 5)
             {
                 hilftFreund = false;
                 greiftAn = false;
@@ -703,6 +752,11 @@ namespace AntMe.SmartassAnts
             if (EntfernungZuBau == 0)
             {
                 memory.ActionSuccessful();
+            }
+
+            if (AktuelleLast == 0)
+            {
+                trägtNahrung = false;
             }
 		}
 
@@ -730,6 +784,7 @@ namespace AntMe.SmartassAnts
                 else
                 {
                     //kein Bock
+                    BleibStehen();
                     WaitUntil(50);
                 }
             }

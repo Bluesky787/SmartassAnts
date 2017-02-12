@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AntMe.Deutsch;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -7,21 +8,27 @@ namespace AntMe.SmartassAnts
 	class Memory
 	{
 		private List<DecisionType> lastActions;
-		private static double ratingLaufen, ratingWegrennen, ratingAngreifenAmeise, ratingAngreifenWanze, ratingSammelnZucker, ratingSammelnObst;
+		private static double ratingLaufen = 0.5, ratingWegrennen = 0.5, ratingAngreifenAmeise = 0.5, ratingAngreifenWanze = 0.5, ratingSammelnZucker = 1.0, ratingSammelnObst = 0.5;
         private MeineAmeise parentAnt;
+
+        internal static Zucker gemerkterZucker = null;
+        internal static int gemerkterZucker_EntfernungZuBau = 9000000;
 
 		double learneffect = 0.1;
 
 		public Memory(MeineAmeise ParentAnt)
 		{
 			lastActions = new List<DecisionType>();
-			ratingLaufen = 0.50;
+
+            //Nicht bei Static-Variablen!!!
+            /*
+            ratingLaufen = 0.50;
 			ratingWegrennen = 0.50;
 			ratingAngreifenAmeise = 0.50;
 			ratingAngreifenWanze = 0.50;
 			ratingSammelnZucker = 0.50;
 			ratingSammelnObst = 0.50;
-
+            */
             this.parentAnt = ParentAnt;
 		}
 		
