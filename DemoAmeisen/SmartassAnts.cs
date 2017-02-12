@@ -161,26 +161,27 @@ namespace AntMe.SmartassAnts
                 return;
             }
             //Hat die Ameise etwas gemacht?
-            if (greiftAn)
-            {
-                greiftAn = false;
-                memory.ActionSuccessful();
-            }
-
-            if (trägtNahrung)
-            {
-                trägtNahrung = false;
-                memory.ActionSuccessful();
-            }
-
-            if (hilftFreund)
-            {
-                hilftFreund = false;
-                memory.ActionSuccessful();
-            }
+          
 
             if (EntfernungZuBau == 0)
             {
+                if (greiftAn)
+                {
+                    greiftAn = false;
+                    memory.ActionSuccessful();
+                }
+
+                if (trägtNahrung)
+                {
+                    trägtNahrung = false;
+                    memory.ActionSuccessful();
+                }
+
+                if (hilftFreund)
+                {
+                    hilftFreund = false;
+                    memory.ActionSuccessful();
+                }
                 //Entscheiden, ob letzter Zucker gesucht werden soll
                 if (Memory.gemerkterZucker != null)
                 {
@@ -744,23 +745,6 @@ namespace AntMe.SmartassAnts
             }
             else
                 Weitermachen();
-
-            if (Ziel == null || EntfernungZuBau < 5)
-            {
-                hilftFreund = false;
-                greiftAn = false;
-                trägtNahrung = false;
-            }
-
-            if (EntfernungZuBau == 0)
-            {
-                memory.ActionSuccessful();
-            }
-
-            if (AktuelleLast == 0)
-            {
-                trägtNahrung = false;
-            }
 		}
 
         /// <summary>
