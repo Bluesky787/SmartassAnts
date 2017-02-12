@@ -156,8 +156,9 @@ namespace AntMe.SmartassAnts
 			else
 			{
 
-				//Gedächtnis einbeziehen (wie gut war die Entscheidung beim letzten Mal?)
-				defuzzedValue += ratingAction * 100;
+                //Gedächtnis einbeziehen (wie gut war die Entscheidung beim letzten Mal?)
+                //Durchschnitt reicht nicht aus, beachtet extreme Werte nicht ausreichend
+                defuzzedValue += ratingAction * 100;
 				defuzzedValue /= 2.0;
 
 				return generateDecision(defuzzedValue);

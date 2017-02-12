@@ -182,17 +182,20 @@ namespace AntMe.SmartassAnts
             if (EntfernungZuBau == 0)
             {
                 //Entscheiden, ob letzter Zucker gesucht werden soll
-                if (FuzzyInferenceSystem.Superdecision5x5x2(character.faulheit, character.energie, character.sammelnzucker, memory.GetDecisionValue(DecisionType.SammelnZucker)))
+                if (Memory.gemerkterZucker != null)
                 {
-                    //Zucker sammeln
-                    GeheZuZiel(Memory.gemerkterZucker);
-                    memory.ActionDone(DecisionType.Laufen);
-                    memory.ActionDone(DecisionType.SammelnZucker);
-                }
-                else
-                {
-                    //Entscheiden, ob die Ameise laufen soll
-                    Weitermachen();
+                    if (FuzzyInferenceSystem.Superdecision5x5x2(character.faulheit, character.energie, character.sammelnzucker, memory.GetDecisionValue(DecisionType.SammelnZucker)))
+                    {
+                        //Zucker sammeln
+                        GeheZuZiel(Memory.gemerkterZucker);
+                        memory.ActionDone(DecisionType.Laufen);
+                        memory.ActionDone(DecisionType.SammelnZucker);
+                    }
+                    else
+                    {
+                        //Entscheiden, ob die Ameise laufen soll
+                        Weitermachen();
+                    }
                 }
             }
             else
