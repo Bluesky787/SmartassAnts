@@ -113,7 +113,8 @@ namespace AntMe.SmartassAnts
 
         #endregion
 
-        int waitforframe = 0, currentFrame = 0;
+        int waitForFrame = 0, currentFrame = 0, breakActionAtFrame = 0;
+        int breakActionAfterFrames = 500, awaitingFrames = 50;
 		public MeineAmeise()
 		{
             memory = new Memory(this);
@@ -156,7 +157,7 @@ namespace AntMe.SmartassAnts
 		/// </summary>
 		public override void Wartet()
 		{
-            if(currentFrame <= waitforframe)
+            if(currentFrame <= waitForFrame)
             {
                 return;
             }
@@ -229,6 +230,7 @@ namespace AntMe.SmartassAnts
 		/// <param name="zucker">Der nächstgelegene Zuckerhaufen.</param>
 		public override void Sieht(Zucker zucker)
         {
+            //Alle Ameisen sollen Zucker kennen
             if (Memory.gemerkterZucker == null)
             {
                 Memory.gemerkterZucker = zucker;
@@ -251,6 +253,7 @@ namespace AntMe.SmartassAnts
                     //SprüheMarkierung((int)Information.ZielNahrung, MarkierungGrößeSammler);
                     GeheZuZiel(zucker);
                     memory.ActionDone(DecisionType.SammelnZucker);
+                    setActionBreak();
 
                     //SprüheMarkierung
                     SprüheMarkierung(Markers.Add(new Marker(Marker.MarkerType.Zucker, zucker)), MarkierungGrößeInformation);
@@ -261,7 +264,8 @@ namespace AntMe.SmartassAnts
             else
             {
                 //traegt Nahrung
-                Weitermachen();
+                //Weitermachen();
+                GeheZuBau();
             }
         }
 
@@ -279,18 +283,23 @@ namespace AntMe.SmartassAnts
                     GeheZuZiel(obst);
                     memory.ActionDone(DecisionType.SammelnObst);
                     memory.ActionDone(DecisionType.Gruppieren);
+                    setActionBreak();
 
                     //SprüheMarkierung
                     SprüheMarkierung(Markers.Add(new Marker(Marker.MarkerType.HilfeObst, obst)), MarkierungGrößeHilfeLokal);
                 }
                 else
                 {
-                    //trägt Nahrung
+                    //kein Bock
                     Weitermachen();
                 }
             }
             else
-                Weitermachen();
+            {
+                //trägt Nahrung
+                //Weitermachen();
+                GeheZuBau();
+            }
 
         }
 
@@ -307,14 +316,14 @@ namespace AntMe.SmartassAnts
                 Memory.gemerkterZucker = zucker;
             }
 
-            if (!trägtNahrung)
-            {
+            //if (!trägtNahrung)
+            //{
                 //Zucker nehmen
                 Nimm(zucker);
                 trägtNahrung = true;
 
                 SprüheMarkierung(Markers.Add(new Marker(Marker.MarkerType.Zucker, zucker)), MarkierungGrößeInformation);
-            }
+            //}
             GeheZuBau();
         }
 
@@ -374,6 +383,7 @@ namespace AntMe.SmartassAnts
                                     greiftAn = true;
                                     hilftFreund = true;
                                     memory.ActionDone(DecisionType.AngreifenAmeise);
+                                    setActionBreak();
                                 }
                                 else
                                     Weitermachen();
@@ -399,6 +409,7 @@ namespace AntMe.SmartassAnts
                                     hilftFreund = true;
                                     memory.ActionDone(DecisionType.SammelnObst);
                                     memory.ActionDone(DecisionType.Gruppieren);
+                                    setActionBreak();
                                     //SprüheMarkierung(Markers.Add(new Marker(Marker.MarkerType.Obst, marker.Objekt)), MarkierungGrößeHilfeLokal);
                                 }
                                 else
@@ -431,6 +442,7 @@ namespace AntMe.SmartassAnts
                                     greiftAn = true;
                                     hilftFreund = true;
                                     memory.ActionDone(DecisionType.AngreifenWanze);
+                                    setActionBreak();
                                     //SprüheMarkierung(Markers.Add(new Marker(Marker.MarkerType.HilfeWanze, marker.Insekt)), MarkierungGrößeHilfeLokal);
                                 }
                             }
@@ -453,6 +465,7 @@ namespace AntMe.SmartassAnts
                                     hilftFreund = true;
                                     memory.ActionDone(DecisionType.SammelnObst);
                                     memory.ActionDone(DecisionType.Gruppieren);
+                                    setActionBreak();
 
                                     //SprüheMarkierung
                                     //SprüheMarkierung(Markers.Add(new Marker(Marker.MarkerType.HilfeObst, marker.Objekt)), MarkierungGrößeHilfeLokal);
@@ -462,9 +475,8 @@ namespace AntMe.SmartassAnts
                             }
                             else
                             {
-                                //kein Bock
-                                BleibStehen();
-                                WaitUntil(50);
+                                //kein Bock, Obst aufzunehmen
+                                Weitermachen();
                            }
                         }
                         else
@@ -491,6 +503,7 @@ namespace AntMe.SmartassAnts
 
 
                                         memory.ActionDone(DecisionType.SammelnZucker);
+                                        setActionBreak();
 
                                         //SprüheMarkierung
                                         //SprüheMarkierung(Markers.Add(new Marker(Marker.MarkerType.Zucker, marker.Objekt)), MarkierungGrößeInformation);
@@ -536,6 +549,7 @@ namespace AntMe.SmartassAnts
                     {
                         this.GeheZuZiel(ameise);
                         memory.ActionDone(DecisionType.Gruppieren);
+                        setActionBreak();
                     }
                     else
                         Weitermachen();
@@ -580,6 +594,7 @@ namespace AntMe.SmartassAnts
                         GreifeAn(wanze);
                         greiftAn = true;
                         memory.ActionDone(DecisionType.AngreifenWanze);
+                        setActionBreak();
                     }
                     else
                     {
@@ -635,6 +650,7 @@ namespace AntMe.SmartassAnts
                     GreifeAn(ameise);
                     greiftAn = true;
                     memory.ActionDone(DecisionType.AngreifenAmeise);
+                    setActionBreak();
                 }
                 else
                     Weitermachen();
@@ -662,6 +678,7 @@ namespace AntMe.SmartassAnts
                 GreifeAn(wanze);
                 greiftAn = true;
                memory.ActionDone(DecisionType.AngreifenWanze);
+                setActionBreak();
                 
             }
             else
@@ -669,6 +686,7 @@ namespace AntMe.SmartassAnts
                 LasseNahrungFallen();
                 trägtNahrung = false;
                 memory.ActionDone(DecisionType.Wegrennen);
+                setActionBreak();
                 GeheZuBau();
             }
          
@@ -717,7 +735,16 @@ namespace AntMe.SmartassAnts
             if (currentFrame % 50 == 0 && Ziel == null)
             {
                 //BleibStehen(); //Nicht benötigt, ist in Weitermachen() enthalten
-                Weitermachen();
+                //Weitermachen(); //nervt gerade, weil Ameisen ihr Ziel verlieren
+            }
+
+            //Erfolglose Aktionen abbrechen
+            if (breakActionAtFrame != 0 && breakActionAtFrame < currentFrame)
+            {
+                //LasseNahrungFallen(); //bringt nichts
+                GeheZuBau();
+                memory.ActionUnsuccessful();
+                return;
             }
 
             if (trägtNahrung)
@@ -779,8 +806,13 @@ namespace AntMe.SmartassAnts
 
         public void WaitUntil(int numFrames)
         {
-            waitforframe = currentFrame + numFrames;
+            waitForFrame = currentFrame + numFrames;
             
+        }
+
+        public void setActionBreak()
+        {
+            breakActionAtFrame = currentFrame + breakActionAfterFrames;
         }
 
 		#endregion

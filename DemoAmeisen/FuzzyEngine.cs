@@ -158,9 +158,22 @@ namespace AntMe.SmartassAnts
 
                 //Gedächtnis einbeziehen (wie gut war die Entscheidung beim letzten Mal?)
                 //Durchschnitt reicht nicht aus, beachtet extreme Werte nicht ausreichend
-                defuzzedValue += ratingAction * 100;
-				defuzzedValue /= 2.0;
+                //-> Extremere Werte sollen die Entscheidung stärker beeinflussen
+                if (ratingAction > 0.5)
+                {
+                    ratingAction = Math.Sqrt(ratingAction);
+                }
 
+                if (ratingAction < 0.5)
+                {
+                    ratingAction *= ratingAction;
+                }
+
+                //Durchschnitt mit doppelter Gewichtung des Ratings
+                defuzzedValue += ratingAction * 200;
+				defuzzedValue /= 3.0;
+
+                
 				return generateDecision(defuzzedValue);
 			}
 		}
