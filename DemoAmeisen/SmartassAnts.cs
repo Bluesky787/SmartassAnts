@@ -673,12 +673,7 @@ namespace AntMe.SmartassAnts
 		/// </summary>
 		/// <param name="wanze">Die angreifende Wanze.</param>
 		public override void WirdAngegriffen(Wanze wanze)
-		{
-            /*
-            SprüheMarkierung((int)Information.Hilfe, MarkierungGrößeHilfe);
-            GreifeAn(wanze);
-            greiftAn = true;
-			*/
+		{           
             //Entscheidung Angreifen
             //Wenn negativ, Entscheidung wegrennen
             if (FuzzyInferenceSystem.Superdecision5x5x2(character.wut, character.ameisenFreundeInNaehe, character.angreifen, memory.GetDecisionValue(1-DecisionType.Wegrennen))) //beeinflusst Entscheidung zum Angriff negativ
@@ -695,7 +690,7 @@ namespace AntMe.SmartassAnts
                 trägtNahrung = false;
                 memory.ActionDone(DecisionType.Wegrennen);
                 setActionBreak();
-                GeheZuBau();
+                GeheWegVon(wanze);
             }
          
 		}
@@ -707,16 +702,24 @@ namespace AntMe.SmartassAnts
 		/// <param name="ameise">Die angreifende feindliche Ameise.</param>
 		public override void WirdAngegriffen(Ameise ameise)
 		{
-            /*
-            SprüheMarkierung((int)Information.Hilfe, MarkierungGrößeHilfe);
-            GreifeAn(ameise);
-            greiftAn = true;
-			*/
+            
 
             //Entscheidung Angreifen
             //Wenn negativ, Entscheidung wegrennen
-            memory.ActionUnsuccessful();
-            Weitermachen();
+            if (FuzzyInferenceSystem.Superdecision5x5x2(character.wut, character.energie, character.angreifen, memory.GetDecisionValue(DecisionType.AngreifenAmeise)))
+            {
+                GreifeAn(ameise);
+                greiftAn = true;
+                memory.ActionDone(DecisionType.AngreifenAmeise);
+                setActionBreak();
+                
+            }else
+            {
+                GeheWegVon(ameise);
+                memory.ActionDone(DecisionType.Wegrennen);
+                setActionBreak();
+            }
+            
         }
 
 		#endregion
