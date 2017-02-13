@@ -1,7 +1,7 @@
 ﻿/*ToDo:
  * Vereerbung
- * Entscheidungsfunktionen für Warten und Wegrennen fehlen
- * ActionDone für Warten und wegrennen fehlen
+ * Entscheidung, Freunden zu helfen (und Nahrung ggf. fallen lassen zu müssen), hinzufügen -> auch abhängig von ANzahl der Ameisen in der Nähe (je mehr in der Nähe, desto unwahrscheinlicher)
+ * Spawn-Kaste abhängig von allgemeiner Stimmung (Mehr Wut -> mehr Aggro-Ameisen usw.)
  */
 
 using System;
