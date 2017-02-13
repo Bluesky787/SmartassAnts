@@ -8,7 +8,7 @@ namespace AntMe.SmartassAnts
 	class Memory
 	{
 		private List<DecisionType> lastActions;
-		private static double ratingLaufen = 0.5, ratingWegrennen = 0.5, ratingAngreifenAmeise = 0.5, ratingAngreifenWanze = 0.5, ratingSammelnZucker = 1.0, ratingSammelnObst = 0.5;
+		private static double ratingLaufen = 0.5, ratingWegrennen = 0.5, ratingAngreifenAmeise = 0.5, ratingAngreifenWanze = 0.5, ratingSammelnZucker = 0.5, ratingSammelnObst = 0.5, ratingWarten = 0.5;
         private MeineAmeise parentAnt;
 
         internal static Zucker gemerkterZucker = null;
@@ -52,16 +52,21 @@ namespace AntMe.SmartassAnts
                             ratingAngreifenWanze = Math.Min(ratingAngreifenWanze + learneffect, 1.0);
                             break;
                         case DecisionType.Laufen:
-                            ratingLaufen = Math.Min(ratingLaufen + learneffect, 1.0); ;
+                            ratingLaufen = Math.Min(ratingLaufen + learneffect, 1.0);
+                            ratingWarten = Math.Max(ratingWarten - (0.5* learneffect), 0.0);
                             break;
                         case DecisionType.SammelnObst:
-                            ratingSammelnObst = Math.Min(ratingSammelnObst + learneffect, 1.0); ;
+                            ratingSammelnObst = Math.Min(ratingSammelnObst + learneffect, 1.0);
                             break;
                         case DecisionType.SammelnZucker:
-                            ratingSammelnZucker = Math.Min(ratingSammelnZucker + learneffect, 1.0); ;
+                            ratingSammelnZucker = Math.Min(ratingSammelnZucker + learneffect, 1.0);
+                            break;
+                        case DecisionType.Warten:
+                            ratingWarten = Math.Min(ratingWegrennen + learneffect, 1.0);
+                            ratingLaufen = Math.Max(ratingLaufen - (0.5 * learneffect), 0.0);
                             break;
                         case DecisionType.Wegrennen:
-                            ratingWegrennen = Math.Min(ratingWegrennen + learneffect, 1.0); ;
+                            ratingWegrennen = Math.Min(ratingWegrennen + learneffect, 1.0);
                             break;
                         default:
                             break;
@@ -84,19 +89,24 @@ namespace AntMe.SmartassAnts
                             ratingAngreifenAmeise = Math.Max(ratingAngreifenAmeise - learneffect, 0.0);
                             break;
                         case DecisionType.AngreifenWanze:
-                            ratingAngreifenWanze = Math.Max(ratingAngreifenWanze - learneffect, 0.0); ;
+                            ratingAngreifenWanze = Math.Max(ratingAngreifenWanze - learneffect, 0.0);
                             break;
                         case DecisionType.Laufen:
-                            ratingLaufen = Math.Max(ratingLaufen - learneffect, 0.0); ;
+                            ratingLaufen = Math.Max(ratingLaufen - learneffect, 0.0);
+                            ratingWarten = Math.Min(ratingWarten + (0.5 * learneffect), 1.0);
                             break;
                         case DecisionType.SammelnObst:
-                            ratingSammelnObst = Math.Max(ratingSammelnObst - learneffect, 0.0); ;
+                            ratingSammelnObst = Math.Max(ratingSammelnObst - learneffect, 0.0);
                             break;
                         case DecisionType.SammelnZucker:
-                            ratingSammelnZucker = Math.Max(ratingSammelnZucker - learneffect, 0.0); ;
+                            ratingSammelnZucker = Math.Max(ratingSammelnZucker - learneffect, 0.0);
+                            break;
+                        case DecisionType.Warten:
+                            ratingWarten = Math.Max(ratingWarten - learneffect, 0.0);
+                            ratingLaufen = Math.Min(ratingLaufen + (0.5 * learneffect), 1.0);
                             break;
                         case DecisionType.Wegrennen:
-                            ratingWegrennen = Math.Max(ratingWegrennen - learneffect, 0.0); ;
+                            ratingWegrennen = Math.Max(ratingWegrennen - learneffect, 0.0);
                             break;
                         default:
                             break;

@@ -7,6 +7,7 @@ namespace AntMe.SmartassAnts
 	public enum DecisionType
 	{
 		Laufen,             //#
+        Warten,
 		Wegrennen,          //#
 		Gruppieren,         //#
 		AngreifenAmeise,    //#

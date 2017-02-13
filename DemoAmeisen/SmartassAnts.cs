@@ -1,7 +1,6 @@
 ﻿/*ToDo:
  * Vereerbung
- * ActionUnsuccessfull wenn zu viel Zeit verstrichen
- * Entscheidungsfunktionen fehlen (Warten, Wegrennen)
+ * Entscheidungsfunktionen für Warten und Wegrennen fehlen
  * ActionDone für Warten und wegrennen fehlen
  */
 
@@ -37,9 +36,9 @@ namespace AntMe.SmartassAnts
 	// Eine genauere Beschreibung gibts in Lektion 6 des Ameisen-Tutorials.
 	[Kaste(
 		Name = "Standard",
-		GeschwindigkeitModifikator = 0,
-		DrehgeschwindigkeitModifikator = 0,
-		LastModifikator = 0,
+		GeschwindigkeitModifikator = 2,
+		DrehgeschwindigkeitModifikator = -1,
+		LastModifikator = -1,
 		ReichweiteModifikator = 0,
 		SichtweiteModifikator = 0,
 		EnergieModifikator = 0,
@@ -48,20 +47,20 @@ namespace AntMe.SmartassAnts
     [Kaste(
         Name = "Aggro",
         GeschwindigkeitModifikator = 1,
-        DrehgeschwindigkeitModifikator = 0,
+        DrehgeschwindigkeitModifikator = -1,
         LastModifikator = -1,
         ReichweiteModifikator = -1,
         SichtweiteModifikator = -1,
-        EnergieModifikator = 0,
+        EnergieModifikator = 1,
         AngriffModifikator = 2
     )]
     [Kaste(
         Name = "Foodloot",
-        GeschwindigkeitModifikator = -1,
+        GeschwindigkeitModifikator = 2,
         DrehgeschwindigkeitModifikator = -1,
-        LastModifikator = 2,
-        ReichweiteModifikator = 2,
-        SichtweiteModifikator = 0,
+        LastModifikator = -1,
+        ReichweiteModifikator = 1,
+        SichtweiteModifikator = 1,
         EnergieModifikator = -1,
         AngriffModifikator = -1
     )]
@@ -258,8 +257,6 @@ namespace AntMe.SmartassAnts
                     GeheZuZiel(zucker);
                     memory.ActionDone(DecisionType.SammelnZucker);
                     setActionBreak();
-
-                    
                 }
                 else
                     Weitermachen();
@@ -496,6 +493,8 @@ namespace AntMe.SmartassAnts
                                 if (marker.markerInformation == Marker.MarkerInformationType.Object)
                                 {
                                     GeheZuZiel(marker.Objekt);
+                                    memory.ActionDone(DecisionType.SammelnZucker);
+                                    setActionBreak();
                                 }
                                 else
                                 {
@@ -505,9 +504,8 @@ namespace AntMe.SmartassAnts
                                         {
                                             DreheInRichtung(marker.richtung);
                                             GeheGeradeaus();
-
-
                                             memory.ActionDone(DecisionType.SammelnZucker);
+                                            setActionBreak();
                                         } 
                                         else
                                         {
@@ -591,44 +589,27 @@ namespace AntMe.SmartassAnts
 		{
             if (!trägtNahrung && !greiftAn)
             {
-                if (FuzzyInferenceSystem.Superdecision5x5x2(character.wut, character.energie, character.angreifen, memory.GetDecisionValue(DecisionType.AngreifenWanze)))
+                if (FuzzyInferenceSystem.Superdecision5x5x2(character.wut, character.energie, character.angreifen, memory.GetDecisionValue(DecisionType.AngreifenWanze)) && FuzzyInferenceSystem.Superdecision5x5x2(character.wut, character.ameisenFreundeInNaehe, character.angreifen, memory.GetDecisionValue(DecisionType.AngreifenWanze)))
                 {
-                    if (FuzzyInferenceSystem.Superdecision5x5x2(character.wut, character.ameisenFreundeInNaehe, character.angreifen, memory.GetDecisionValue(DecisionType.AngreifenWanze)))
-                    {
-                        //hilfe rufen
-                        SprüheMarkierung(Markers.Add(new Marker(Marker.MarkerType.HilfeWanze, wanze)), MarkierungGrößeHilfe);
+                    //hilfe rufen
+                    SprüheMarkierung(Markers.Add(new Marker(Marker.MarkerType.HilfeWanze, wanze)), MarkierungGrößeHilfe);
 
-                        //angreifen
-                        GreifeAn(wanze);
-                        greiftAn = true;
-                        memory.ActionDone(DecisionType.AngreifenWanze);
-                        setActionBreak();
-                    }
-                    else
-                    {
-                        //wegrennen
-                        //Entscheidung wegrennen
-                        //GeheZuBau();
-                        //memory.ActionDone(DecisionType.Wegrennen);
-                        Weitermachen();
-                    }
+                    //angreifen
+                    GreifeAn(wanze);
+                    greiftAn = true;
+                    memory.ActionDone(DecisionType.AngreifenWanze);
+                    setActionBreak();
+                }
+                else
+                {
+                    //Entscheidung wegrennen
+                    GeheWegVon(wanze);
+                    memory.ActionDone(DecisionType.Wegrennen);
+                    setActionBreak();
                 }
             }
             else
             {
-                //wegrennen
-                //Entscheidung flüchten? -> Nahrung sofort fallen lassen
-
-                /*if (EntfernungZuBau == 0)
-                {
-                    LasseNahrungFallen();
-                    trägtNahrung = false;
-                    GeheZuBau();
-                }*/
-
-                //speichern, dass Ameise bereits weggerannt ist?
-                //memory.ActionDone(DecisionType.Wegrennen);
-
                 Weitermachen();
             }
         }
@@ -686,8 +667,7 @@ namespace AntMe.SmartassAnts
                 GreifeAn(wanze);
                 greiftAn = true;
                memory.ActionDone(DecisionType.AngreifenWanze);
-                setActionBreak();
-                
+                setActionBreak();                
             }
             else
             {
@@ -696,8 +676,7 @@ namespace AntMe.SmartassAnts
                 memory.ActionDone(DecisionType.Wegrennen);
                 setActionBreak();
                 GeheZuBau();
-            }
-         
+            }         
 		}
 
 		/// <summary>
@@ -809,12 +788,15 @@ namespace AntMe.SmartassAnts
                 if (FuzzyInferenceSystem.Superdecision5x5x2(character.faulheit, character.energie, character.laufen, memory.GetDecisionValue(DecisionType.Laufen)))
                 {
                     GeheGeradeaus();
+                    setActionBreak();
+                    memory.ActionDone(DecisionType.Laufen);
                 }
                 else
                 {
                     //kein Bock
                     BleibStehen();
                     WaitUntil(50);
+                    memory.ActionDone(DecisionType.Warten);
                 }
             }
         }

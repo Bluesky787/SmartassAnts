@@ -111,7 +111,8 @@ namespace AntMe.SmartassAnts
 		internal Teamfaehigkeit teamfaehigkeit;
 		
 		//Decisions
-		internal Decision laufen = new Decision(DecisionType.Laufen, "Steht", "Laeuft", true);
+		internal Decision laufen = new Decision(DecisionType.Laufen, "Steht", "Laeuft", true);  //Losgehen aus Bau
+        internal Decision warten = new Decision(DecisionType.Warten, "Wartet", "Macht_Weiter", false);  //Aktionen pausieren
 		internal Decision angreifen = new Decision(DecisionType.AngreifenAmeise, "Greift_nicht_an", "Greift_an", true);
 		internal Decision gruppieren = new Decision(DecisionType.Gruppieren, "Nicht_gruppieren", "Gruppieren", true);
         internal Decision sammelnzucker = new Decision(DecisionType.SammelnZucker, "Nicht_sammeln", "Sammeln", true);
