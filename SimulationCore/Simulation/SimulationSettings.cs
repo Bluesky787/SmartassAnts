@@ -354,12 +354,12 @@ namespace AntMe.Simulation {
             BattleRange = 5;
 
             // Livetime and Respawn
-            AntSimultaneousCount = 1;
+            AntSimultaneousCount = 100;
             BugSimultaneousCount = 0;
             SugarSimultaneousCount = 1;
             FruitSimultaneousCount = 2;
 
-            BugCountPlayerMultiplier = 0f;
+            BugCountPlayerMultiplier = 1f;
             SugarCountPlayerMultiplier = 1f;
             FruitCountPlayerMultiplier = 1f;
             AntCountPlayerMultiplier = 0f;
@@ -380,7 +380,7 @@ namespace AntMe.Simulation {
             FruitRespawnDelay = 225;
 
             // Bugsettings
-            BugAttack = 25;
+            BugAttack = 50;
             BugRotationSpeed = 3;
             BugEnergy = 1000;
             BugSpeed = 3;
@@ -403,8 +403,8 @@ namespace AntMe.Simulation {
 
             // Points
             PointsForFoodMultiplier = 1;
-            PointsForFruits = 150;
-            PointsForBug = 300;
+            PointsForFruits = 0;
+            PointsForBug = 150;
             PointsForForeignAnt = 5;
             PointsForEatenAnts = 0;
             PointsForBeatenAnts = -5;

@@ -114,7 +114,7 @@ namespace AntMe.SmartassAnts
         #endregion
 
         int waitForFrame = 0, currentFrame = 0, breakActionAtFrame = 0;
-        int breakActionAfterFrames = 100, awaitingFrames = 50;
+        int breakActionAfterFrames = 500, awaitingFrames = 50;
 		public MeineAmeise()
 		{
             memory = new Memory(this);
@@ -281,7 +281,7 @@ namespace AntMe.SmartassAnts
 		{
             if (!trägtNahrung)
             {
-                if (FuzzyInferenceSystem.Superdecision5x5x2(character.faulheit, character.energie, character.sammelnobst, memory.GetDecisionValue(DecisionType.SammelnObst))) // && FuzzyInferenceSystem.Superdecision5x5x2(character.teamfaehigkeit, character.ameisenFreundeInNaehe, character.sammelnobst, memory.GetDecisionValue(DecisionType.Gruppieren)))
+                if (FuzzyInferenceSystem.Superdecision5x5x2(character.faulheit, character.energie, character.sammelnobst, memory.GetDecisionValue(DecisionType.SammelnObst)) && FuzzyInferenceSystem.Superdecision5x5x2(character.teamfaehigkeit, character.ameisenFreundeInNaehe, character.sammelnobst, memory.GetDecisionValue(DecisionType.Gruppieren)))
                 {
                     GeheZuZiel(obst);
                     memory.ActionDone(DecisionType.SammelnObst);
@@ -402,7 +402,7 @@ namespace AntMe.SmartassAnts
                         //Hilfsbereitschaft, Teamfähigkeit prüfen
                         //nur wenn keine eigene Nahrung
                         //helfen
-                        if (!trägtNahrung)
+                        if (!trägtNahrung && !greiftAn && !hilftFreund)
                         {
                             if (FuzzyInferenceSystem.Superdecision5x5x2(character.faulheit, character.energie, character.sammelnobst, memory.GetDecisionValue(DecisionType.SammelnObst)) && FuzzyInferenceSystem.Superdecision5x5x2(character.teamfaehigkeit, character.ameisenFreundeInNaehe, character.sammelnobst, memory.GetDecisionValue(DecisionType.Gruppieren)))
                             {
@@ -458,7 +458,7 @@ namespace AntMe.SmartassAnts
 
                     case Marker.MarkerType.Obst:
                         //das gleiche wie bei siehtObst()
-                        if (!trägtNahrung)
+                        if (!trägtNahrung && !greiftAn && !hilftFreund)
                         {
                             if (FuzzyInferenceSystem.Superdecision5x5x2(character.faulheit, character.energie, character.sammelnobst, memory.GetDecisionValue(DecisionType.SammelnObst)) && FuzzyInferenceSystem.Superdecision5x5x2(character.teamfaehigkeit, character.ameisenFreundeInNaehe, character.sammelnobst, memory.GetDecisionValue(DecisionType.Gruppieren)))
                             {
@@ -488,7 +488,7 @@ namespace AntMe.SmartassAnts
 
                     case Marker.MarkerType.Zucker:
                         //das Gleiche wie bei siehtZucker()
-                        if (!trägtNahrung)
+                        if (!trägtNahrung && !greiftAn && !hilftFreund)
                         {
                             if (FuzzyInferenceSystem.Superdecision5x5x2(character.faulheit, character.energie, character.sammelnzucker, memory.GetDecisionValue(DecisionType.SammelnZucker)))
                             {
@@ -548,9 +548,9 @@ namespace AntMe.SmartassAnts
 		/// <param name="ameise">Die nächstgelegene befreundete Ameise.</param>
 		public override void SiehtFreund(Ameise ameise)
 		{
-            if (!(this.EntfernungZuBau == 0))
+            if (this.EntfernungZuBau > 5)
             {
-                if (Ziel == null)
+                if (Ziel == null && !(trägtNahrung || hilftFreund || greiftAn))
                 {
                     //grupperen entscheiden
                     if (FuzzyInferenceSystem.Superdecision5x5x2(character.teamfaehigkeit, character.energie, character.gruppieren, memory.GetDecisionValue(DecisionType.Gruppieren)))
@@ -749,8 +749,14 @@ namespace AntMe.SmartassAnts
             //Erfolglose Aktionen abbrechen
             if (breakActionAtFrame != 0 && breakActionAtFrame < currentFrame)
             {
+                breakActionAtFrame = 0;
                 //LasseNahrungFallen(); //bringt nichts
-                GeheZuBau();
+                if (!trägtNahrung)
+                {
+                    BleibStehen();
+                    DreheUmWinkel(90);
+                    GeheGeradeaus();
+                }
                 memory.ActionUnsuccessful();
                 return;
             }
@@ -766,7 +772,8 @@ namespace AntMe.SmartassAnts
                 {
                     if (EntfernungZuBau > 10)
                     {
-                        SprüheMarkierung(Markers.Add(new SmartassAnts.Marker(Marker.MarkerType.Zucker, (Richtung + 180) % 360)), MarkierungGrößeAmeisenstraße);
+                        if (currentFrame % 20 == 0) //nur alle x Frames ausführen
+                            SprüheMarkierung(Markers.Add(new SmartassAnts.Marker(Marker.MarkerType.Zucker, (Richtung + 180) % 360)), MarkierungGrößeAmeisenstraße);
                     }
                 }
                 else
