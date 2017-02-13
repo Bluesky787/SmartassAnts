@@ -17,7 +17,7 @@ namespace AntMe.SmartassAnts
 			Random rand = new Random();
 			double randVal = rand.NextDouble();
 
-			if (randVal <= probability)
+			if (randVal * 100 <= probability)
 				return true;
 			else
 				return false;

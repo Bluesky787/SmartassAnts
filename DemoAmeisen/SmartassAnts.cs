@@ -114,7 +114,7 @@ namespace AntMe.SmartassAnts
         #endregion
 
         int waitForFrame = 0, currentFrame = 0, breakActionAtFrame = 0;
-        int breakActionAfterFrames = 500, awaitingFrames = 50;
+        int breakActionAfterFrames = 100, awaitingFrames = 50;
 		public MeineAmeise()
 		{
             memory = new Memory(this);
@@ -192,6 +192,7 @@ namespace AntMe.SmartassAnts
                         GeheZuZiel(Memory.gemerkterZucker);
                         memory.ActionDone(DecisionType.Laufen);
                         memory.ActionDone(DecisionType.SammelnZucker);
+                        setActionBreak();
                     }
                     else
                     {
@@ -248,7 +249,8 @@ namespace AntMe.SmartassAnts
 
             if (!trägtNahrung)
             {
-                if (FuzzyInferenceSystem.Superdecision5x5x2(character.faulheit, character.energie, character.sammelnzucker, memory.GetDecisionValue(DecisionType.SammelnZucker)))
+                //if (FuzzyInferenceSystem.Superdecision5x5x2(character.faulheit, character.energie, character.sammelnzucker, memory.GetDecisionValue(DecisionType.SammelnZucker)))
+                if (true)
                 {
                     //SprüheMarkierung((int)Information.ZielNahrung, MarkierungGrößeSammler);
                     GeheZuZiel(zucker);
@@ -278,7 +280,7 @@ namespace AntMe.SmartassAnts
 		{
             if (!trägtNahrung)
             {
-                if (FuzzyInferenceSystem.Superdecision5x5x2(character.faulheit, character.energie, character.sammelnobst, memory.GetDecisionValue(DecisionType.SammelnObst)) && FuzzyInferenceSystem.Superdecision5x5x2(character.teamfaehigkeit, character.ameisenFreundeInNaehe, character.sammelnobst, memory.GetDecisionValue(DecisionType.Gruppieren)))
+                if (FuzzyInferenceSystem.Superdecision5x5x2(character.faulheit, character.energie, character.sammelnobst, memory.GetDecisionValue(DecisionType.SammelnObst))) // && FuzzyInferenceSystem.Superdecision5x5x2(character.teamfaehigkeit, character.ameisenFreundeInNaehe, character.sammelnobst, memory.GetDecisionValue(DecisionType.Gruppieren)))
                 {
                     GeheZuZiel(obst);
                     memory.ActionDone(DecisionType.SammelnObst);
