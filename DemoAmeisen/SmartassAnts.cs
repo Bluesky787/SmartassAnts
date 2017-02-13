@@ -249,16 +249,17 @@ namespace AntMe.SmartassAnts
 
             if (!trägtNahrung)
             {
-                //if (FuzzyInferenceSystem.Superdecision5x5x2(character.faulheit, character.energie, character.sammelnzucker, memory.GetDecisionValue(DecisionType.SammelnZucker)))
-                if (true)
-                {
+               if (FuzzyInferenceSystem.Superdecision5x5x2(character.faulheit, character.energie, character.sammelnzucker, memory.GetDecisionValue(DecisionType.SammelnZucker)))
+               {
+                    //SprüheMarkierung
+                    SprüheMarkierung(Markers.Add(new Marker(Marker.MarkerType.Zucker, zucker)), MarkierungGrößeInformation);
+
                     //SprüheMarkierung((int)Information.ZielNahrung, MarkierungGrößeSammler);
                     GeheZuZiel(zucker);
                     memory.ActionDone(DecisionType.SammelnZucker);
                     setActionBreak();
 
-                    //SprüheMarkierung
-                    SprüheMarkierung(Markers.Add(new Marker(Marker.MarkerType.Zucker, zucker)), MarkierungGrößeInformation);
+                    
                 }
                 else
                     Weitermachen();
@@ -318,14 +319,14 @@ namespace AntMe.SmartassAnts
                 Memory.gemerkterZucker = zucker;
             }
 
-            //if (!trägtNahrung)
-            //{
+           // if (!trägtNahrung)
+           // {
                 //Zucker nehmen
                 Nimm(zucker);
                 trägtNahrung = true;
 
                 SprüheMarkierung(Markers.Add(new Marker(Marker.MarkerType.Zucker, zucker)), MarkierungGrößeInformation);
-            //}
+           // }
             GeheZuBau();
         }
 
@@ -500,13 +501,18 @@ namespace AntMe.SmartassAnts
                                 {
                                     if (marker.markerInformation == Marker.MarkerInformationType.Richtung)
                                     {
-                                        DreheInRichtung(marker.richtung);
-                                        GeheGeradeaus();
+                                        if (Ziel.GetType() != typeof(Zucker))
+                                        {
+                                            DreheInRichtung(marker.richtung);
+                                            GeheGeradeaus();
 
 
-                                        memory.ActionDone(DecisionType.SammelnZucker);
-                                        setActionBreak();
-
+                                            memory.ActionDone(DecisionType.SammelnZucker);
+                                        } 
+                                        else
+                                        {
+                                            Weitermachen();
+                                        }
                                         //SprüheMarkierung
                                         //SprüheMarkierung(Markers.Add(new Marker(Marker.MarkerType.Zucker, marker.Objekt)), MarkierungGrößeInformation);
                                     }
