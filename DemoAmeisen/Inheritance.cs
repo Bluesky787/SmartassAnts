@@ -19,14 +19,16 @@ namespace AntMe.SmartassAnts
             return null;
         }
 
-        public static void InheritAnt(Todesart DeathReasonLastAnt)
+        public static Character InheritAnt(SmartassAnt DiedAnt)
         {
-            InheritAnt(getOldestLivingAnt(), getRandomLivingAnt(), DeathReasonLastAnt);
+            return InheritAnt(getOldestLivingAnt().character, getRandomLivingAnt().character, DiedAnt.Todesart);
         }
 
-        public static void InheritAnt(SmartassAnt Parent1, SmartassAnt Parent2, Todesart DeathReason)
+        private static Character InheritAnt(Character Parent1, Character Parent2, Todesart DeathReason)
         {
-            
+            Character inheritedCharacter = new Character();
+
+            return inheritedCharacter;
         }
     }
 }

@@ -117,7 +117,7 @@ namespace AntMe.SmartassAnts
 
         int waitForFrame = 0, currentFrame = 0, breakActionAtFrame = 0;
         int breakActionAfterFrames = 500, awaitingFrames = 50;
-        static List<SmartassAnt> DiedAnts = new List<SmartassAnt>();
+        static Queue<SmartassAnt> DiedAnts = new Queue<SmartassAnt>();
 
         public SmartassAnt()
 		{

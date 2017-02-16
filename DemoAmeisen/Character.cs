@@ -122,10 +122,10 @@ namespace AntMe.SmartassAnts
 
 		// ...
 
-		public Character(Basisameise Parent)
+		public Character()
         {
 			//Init
-			parentAnt = Parent;
+			//parentAnt = Parent;
 
             //Circumstances
             ameisenFeindeInNaehe = new AmeisenFeindeInNaehe(CircumstanceType.AmeisenFeindeInNähe, parentAnt);
