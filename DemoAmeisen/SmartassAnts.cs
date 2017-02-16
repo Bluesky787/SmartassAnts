@@ -2,6 +2,7 @@
  * Vereerbung
  * Entscheidung, Freunden zu helfen (und Nahrung ggf. fallen lassen zu müssen), hinzufügen -> auch abhängig von ANzahl der Ameisen in der Nähe (je mehr in der Nähe, desto unwahrscheinlicher)
  * Spawn-Kaste abhängig von allgemeiner Stimmung (Mehr Wut -> mehr Aggro-Ameisen usw.)
+ * Laufen darf nicht mehrmals hintereinander in die ActionDone-Liste aufgenommen werden
  */
 
 using System;
@@ -122,6 +123,7 @@ namespace AntMe.SmartassAnts
         static Queue<SmartassAnt> DiedAnts = new Queue<SmartassAnt>();
         public static SortedList<int, SmartassAnt> Ants = new SortedList<int, SmartassAnt>();
         static int idCounter = 0;
+        Spielobjekt AltesZiel = null;
 
         public Todesart Todesart;
         public long Age = 0;
@@ -151,8 +153,6 @@ namespace AntMe.SmartassAnts
             this.id = idCounter++;
             Ants.Add(id, this);
 		}
-
-        
         
         #region Kaste
 
@@ -223,7 +223,10 @@ namespace AntMe.SmartassAnts
                     {
                         //Zucker sammeln
                         GeheZuZiel(Memory.gemerkterZucker);
-                        memory.ActionDone(DecisionType.Laufen);
+
+                        if (memory.LastAction != DecisionType.Laufen)
+                            memory.ActionDone(DecisionType.Laufen);
+
                         memory.ActionDone(DecisionType.SammelnZucker);
                         setActionBreak();
                     }
@@ -828,16 +831,31 @@ namespace AntMe.SmartassAnts
             {
                 if (FuzzyInferenceSystem.Superdecision5x5x2(character.faulheit, character.energie, character.laufen, memory.GetDecisionValue(DecisionType.Laufen)))
                 {
-                    GeheGeradeaus();
-                    setActionBreak();
-                    memory.ActionDone(DecisionType.Laufen);
+                    if (AltesZiel != null)
+                    {
+                        GeheZuZiel(AltesZiel);
+
+                        //Zucker kann immer als Ziel beibehalten werden
+                        if (AltesZiel.GetType() != typeof(Zucker))
+                            AltesZiel = null;
+                    }
+                    else
+                    {
+                        //Kein Ziel gemerkt
+                        GeheGeradeaus();
+                        setActionBreak();
+                        if (memory.LastAction != DecisionType.Laufen)
+                            memory.ActionDone(DecisionType.Laufen);
+                    }
                 }
                 else
                 {
                     //kein Bock
                     BleibStehen();
                     WaitUntil(50);
-                    memory.ActionDone(DecisionType.Warten);
+
+                    if (memory.LastAction != DecisionType.Warten)
+                        memory.ActionDone(DecisionType.Warten);
                 }
             }
         }
