@@ -117,11 +117,17 @@ namespace AntMe.SmartassAnts
 
         int waitForFrame = 0, currentFrame = 0, breakActionAtFrame = 0;
         int breakActionAfterFrames = 500, awaitingFrames = 50;
-        static List<SmartassAnt> DiedAnts = new List<SmartassAnt>();
+        static Queue<SmartassAnt> DiedAnts = new Queue<SmartassAnt>();
+        public Todesart Todesart;
 
         public SmartassAnt()
 		{
             memory = new Memory(this);
+
+            if (DiedAnts.Peek() != null)
+            {
+               // Character = inheritAnt();
+            } 
 
             //Prüfen, ob Ameisen gestorben sind
             //-> wenn ja, dann sollen neue Ameisen Character erben
@@ -726,6 +732,9 @@ namespace AntMe.SmartassAnts
 		public override void IstGestorben(Todesart todesart)
 		{
             memory.ActionUnsuccessful();
+            Todesart = todesart;
+            DiedAnts.Enqueue(this);
+            
 		}
 
 		/// <summary>
