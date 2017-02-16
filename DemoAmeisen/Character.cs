@@ -49,6 +49,15 @@ namespace AntMe.SmartassAnts
 		{
 			return value;
 		}
+
+        /// <summary>
+        /// Wird für Vereerbung benötigt.
+        /// </summary>
+        /// <param name="newValue"></param>
+        public void OverrideValue(double newValue)
+        {
+            value = newValue;
+        }
     }
 
 	class Faulheit : CharacterType
@@ -128,9 +137,9 @@ namespace AntMe.SmartassAnts
 			//parentAnt = Parent;
 
             //Circumstances
-            ameisenFeindeInNaehe = new AmeisenFeindeInNaehe(CircumstanceType.AmeisenFeindeInNähe, parentAnt);
-            ameisenFreundeInNaehe = new AmeisenFreundeInNaehe(CircumstanceType.AmeisenFreundeInNähe, parentAnt);
-            energie = new Energie(CircumstanceType.Energie, parentAnt);
+            //ameisenFeindeInNaehe = new AmeisenFeindeInNaehe(CircumstanceType.AmeisenFeindeInNähe, parentAnt);
+            //ameisenFreundeInNaehe = new AmeisenFreundeInNaehe(CircumstanceType.AmeisenFreundeInNähe, parentAnt);
+            //energie = new Energie(CircumstanceType.Energie, parentAnt);
 
             //Character
             faulheit = new Faulheit(0);
@@ -141,5 +150,14 @@ namespace AntMe.SmartassAnts
 
 			// ...
 		}
+
+        public void setParentAnt(SmartassAnt parent)
+        {
+            parentAnt = parent;
+            ameisenFeindeInNaehe = new AmeisenFeindeInNaehe(CircumstanceType.AmeisenFeindeInNähe, parentAnt);
+            ameisenFreundeInNaehe = new AmeisenFreundeInNaehe(CircumstanceType.AmeisenFreundeInNähe, parentAnt);
+            energie = new Energie(CircumstanceType.Energie, parentAnt);
+
+        }
     }
 }
