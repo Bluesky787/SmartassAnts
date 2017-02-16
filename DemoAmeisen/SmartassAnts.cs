@@ -277,7 +277,7 @@ namespace AntMe.SmartassAnts
                 //aktueller Zucker näher ran? -> in ZielErreicht(zucker) prüfen
                 //aktueller Zucker voller?
                 //-> neuen Zucker merken
-                if (zucker.Menge > Memory.gemerkterZucker.Menge)
+                if (Memory.gemerkterZucker.Menge == 0)
                 {
                     Memory.gemerkterZucker = zucker;
                 }
@@ -353,15 +353,19 @@ namespace AntMe.SmartassAnts
                 Memory.gemerkterZucker = zucker;
             }
 
-           // if (!trägtNahrung)
-           // {
+            if (zucker.Menge > 0)
+            {
                 //Zucker nehmen
                 Nimm(zucker);
                 trägtNahrung = true;
 
                 SprüheMarkierung(Markers.Add(new Marker(Marker.MarkerType.Zucker, zucker)), MarkierungGrößeInformation);
-           // }
-            GeheZuBau();
+                GeheZuBau();
+            }
+            else
+            {
+                Weitermachen();
+            }
         }
 
 		/// <summary>
@@ -406,16 +410,19 @@ namespace AntMe.SmartassAnts
                         //Nahrung fallen lassen
                         //helfen
 
-                        //wenn sie nicht schon beim angreifen ist
-                        if (!greiftAn && !trägtNahrung)
+                        //wenn sie nicht schon angreift oder noch Nahrung sammelt
+                        if (!greiftAn)
                         {
                             //dann über Angriff nachdenken
                             if (FuzzyInferenceSystem.Superdecision5x5x2(character.teamfaehigkeit, character.ameisenFreundeInNaehe, character.angreifen, memory.GetDecisionValue(DecisionType.AngreifenAmeise)))
                             {
                                 if (marker.markerInformation == Marker.MarkerInformationType.Insekt)
                                 {
-                                   // LasseNahrungFallen();
-                                    //trägtNahrung = false;
+                                    if (Ziel.GetType() == typeof(Zucker))
+                                        AltesZiel = Ziel;
+
+                                    LasseNahrungFallen();
+                                    trägtNahrung = false;
                                     GreifeAn(marker.Insekt);
                                     greiftAn = true;
                                     hilftFreund = true;
@@ -473,6 +480,9 @@ namespace AntMe.SmartassAnts
                             {
                                 if (marker.markerInformation == Marker.MarkerInformationType.Insekt)
                                 {
+                                    if (Ziel.GetType() == typeof(Zucker))
+                                        AltesZiel = Ziel;
+
                                     LasseNahrungFallen();
                                     trägtNahrung = false;
                                     GreifeAn(marker.Insekt);
@@ -538,7 +548,7 @@ namespace AntMe.SmartassAnts
                                     if (marker.markerInformation == Marker.MarkerInformationType.Richtung)
                                     {
                                         if (Ziel.GetType() != typeof(Zucker))
-                                        {
+                                        {   //wichtig, damit Ameisen, die zum Zucker gehen, nicht am Zucker vorbei gelenkt werden
                                             DreheInRichtung(marker.richtung);
                                             GeheGeradeaus();
                                             memory.ActionDone(DecisionType.SammelnZucker);

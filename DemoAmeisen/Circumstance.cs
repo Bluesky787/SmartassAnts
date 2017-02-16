@@ -103,11 +103,11 @@ namespace AntMe.SmartassAnts
 		public AmeisenFeindeInNaehe(CircumstanceType circumstanceType, Basisameise parentAnt) : base(circumstanceType, parentAnt)
 		{
 			characterParts = new DotFuzzy.LinguisticVariable("AmeisenFeindeInNaehe");
-			characterParts.MembershipFunctionCollection.Add(new DotFuzzy.MembershipFunction("Keine", FuzzyValues[0][0], FuzzyValues[0][1], FuzzyValues[0][2], FuzzyValues[0][3]));
-			characterParts.MembershipFunctionCollection.Add(new DotFuzzy.MembershipFunction("Kaum", FuzzyValues[1][0], FuzzyValues[1][1], FuzzyValues[1][2], FuzzyValues[1][3]));
+			characterParts.MembershipFunctionCollection.Add(new DotFuzzy.MembershipFunction("Viele", FuzzyValues[0][0], FuzzyValues[0][1], FuzzyValues[0][2], FuzzyValues[0][3]));
+			characterParts.MembershipFunctionCollection.Add(new DotFuzzy.MembershipFunction("Genug", FuzzyValues[1][0], FuzzyValues[1][1], FuzzyValues[1][2], FuzzyValues[1][3]));
 			characterParts.MembershipFunctionCollection.Add(new DotFuzzy.MembershipFunction("Wenige", FuzzyValues[2][0], FuzzyValues[2][1], FuzzyValues[2][2], FuzzyValues[2][3]));
-			characterParts.MembershipFunctionCollection.Add(new DotFuzzy.MembershipFunction("Genug", FuzzyValues[3][0], FuzzyValues[3][1], FuzzyValues[3][2], FuzzyValues[3][3]));
-			characterParts.MembershipFunctionCollection.Add(new DotFuzzy.MembershipFunction("Viele", FuzzyValues[4][0], FuzzyValues[4][1], FuzzyValues[4][2], FuzzyValues[4][3]));
+			characterParts.MembershipFunctionCollection.Add(new DotFuzzy.MembershipFunction("Kaum", FuzzyValues[3][0], FuzzyValues[3][1], FuzzyValues[3][2], FuzzyValues[3][3]));
+			characterParts.MembershipFunctionCollection.Add(new DotFuzzy.MembershipFunction("Keine", FuzzyValues[4][0], FuzzyValues[4][1], FuzzyValues[4][2], FuzzyValues[4][3]));
 		}
 
 		internal override void setValue()
@@ -115,11 +115,11 @@ namespace AntMe.SmartassAnts
 			switch (parentAnt.AnzahlFremderAmeisenInSichtweite)
 			{
 				case 0:
-					value = 10;
+					value = 100;
 					break;
 				case 1:
 				case 2:
-					value = 35;
+					value = 80;
 					break;
 				case 3:
 				case 4:
@@ -128,10 +128,10 @@ namespace AntMe.SmartassAnts
 				case 5:
 				case 6:
 				case 7:
-					value = 80;
+					value = 35;
 					break;
 				default:
-					value = 100;
+					value = 10;
 					break;
 			}
 		}
