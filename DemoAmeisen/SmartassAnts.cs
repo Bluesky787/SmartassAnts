@@ -404,15 +404,15 @@ namespace AntMe.SmartassAnts
                         //helfen
 
                         //wenn sie nicht schon beim angreifen ist
-                        if (!greiftAn)
+                        if (!greiftAn && !trägtNahrung)
                         {
                             //dann über Angriff nachdenken
                             if (FuzzyInferenceSystem.Superdecision5x5x2(character.teamfaehigkeit, character.ameisenFreundeInNaehe, character.angreifen, memory.GetDecisionValue(DecisionType.AngreifenAmeise)))
                             {
                                 if (marker.markerInformation == Marker.MarkerInformationType.Insekt)
                                 {
-                                    LasseNahrungFallen();
-                                    trägtNahrung = false;
+                                   // LasseNahrungFallen();
+                                    //trägtNahrung = false;
                                     GreifeAn(marker.Insekt);
                                     greiftAn = true;
                                     hilftFreund = true;
