@@ -28,6 +28,8 @@ namespace AntMe.SmartassAnts
 		Nachname = "Ants"
 	)]
 
+    
+
 	#region Kastendefinitionen
 	// Das Typ-Attribut erlaubt das Ändern der Ameisen-Eigenschaften. Um den Typ
 	// zu aktivieren muß ein Name zugewiesen und dieser Name in der Methode 
@@ -77,8 +79,9 @@ namespace AntMe.SmartassAnts
 
 	#endregion
 
-	public class MeineAmeise : Basisameise
-	{
+	public class SmartassAnt : Basisameise
+    { 
+
         #region Character
 
         //readonly int MarkierungGrößeSpotter = 100;
@@ -114,11 +117,21 @@ namespace AntMe.SmartassAnts
 
         int waitForFrame = 0, currentFrame = 0, breakActionAtFrame = 0;
         int breakActionAfterFrames = 500, awaitingFrames = 50;
-		public MeineAmeise()
+        static List<SmartassAnt> DiedAnts = new List<SmartassAnt>();
+
+        public SmartassAnt()
 		{
             memory = new Memory(this);
+
+            //Prüfen, ob Ameisen gestorben sind
+            //-> wenn ja, dann sollen neue Ameisen Character erben
+            //-> lernen von Todesart der letzten Ameise, Charakter der erfolgreichsten Ameise und einer zufälligen Ameise
+            //Character inheritedCharacter = ...
+
             character = new Character(this);
 		}
+
+        
         
         #region Kaste
 

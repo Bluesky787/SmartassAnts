@@ -68,6 +68,7 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Inheritance.cs" />
     <Compile Include="Character.cs" />
     <Compile Include="Circumstance.cs" />
     <Compile Include="Decision.cs" />

@@ -98,7 +98,7 @@ namespace AntMe.SmartassAnts
 
 	}
 
-	class Character
+	public class Character
     {
         //Circumstances
         internal AmeisenFeindeInNaehe ameisenFeindeInNaehe;

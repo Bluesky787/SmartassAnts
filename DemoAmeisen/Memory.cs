@@ -9,14 +9,14 @@ namespace AntMe.SmartassAnts
 	{
 		private List<DecisionType> lastActions;
 		private static double ratingLaufen = 0.5, ratingWegrennen = 0.5, ratingAngreifenAmeise = 0.5, ratingAngreifenWanze = 0.5, ratingSammelnZucker = 0.5, ratingSammelnObst = 0.5, ratingWarten = 0.5;
-        private MeineAmeise parentAnt;
+        private SmartassAnt parentAnt;
 
         internal static Zucker gemerkterZucker = null;
         internal static int gemerkterZucker_EntfernungZuBau = 9000000;
 
 		double learneffect = 0.1;
 
-		public Memory(MeineAmeise ParentAnt)
+		public Memory(SmartassAnt ParentAnt)
 		{
 			lastActions = new List<DecisionType>();
 
