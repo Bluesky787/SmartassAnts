@@ -2,7 +2,7 @@
  * Vereerbung
  * Entscheidung, Freunden zu helfen (und Nahrung ggf. fallen lassen zu müssen), hinzufügen -> auch abhängig von ANzahl der Ameisen in der Nähe (je mehr in der Nähe, desto unwahrscheinlicher)
  * Spawn-Kaste abhängig von allgemeiner Stimmung (Mehr Wut -> mehr Aggro-Ameisen usw.)
- * Laufen darf nicht mehrmals hintereinander in die ActionDone-Liste aufgenommen werden
+ * Mutation in Vereerbung muss mit absoluten Werten arbeiten
  */
 
 using System;
@@ -351,6 +351,7 @@ namespace AntMe.SmartassAnts
             if (EntfernungZuBau < Memory.gemerkterZucker_EntfernungZuBau)
             {
                 Memory.gemerkterZucker = zucker;
+                Memory.gemerkterZucker_EntfernungZuBau = EntfernungZuBau;
             }
 
             if (zucker.Menge > 0)
