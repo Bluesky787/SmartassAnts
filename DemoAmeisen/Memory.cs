@@ -14,7 +14,7 @@ namespace AntMe.SmartassAnts
         internal static Zucker gemerkterZucker = null;
         internal static int gemerkterZucker_EntfernungZuBau = 9000000;
 
-		double learneffect = 0.1;
+		double learneffect = 0.01;
 
 		public Memory(SmartassAnt ParentAnt)
 		{
@@ -32,6 +32,16 @@ namespace AntMe.SmartassAnts
             this.parentAnt = ParentAnt;
 		}
 		
+        public DecisionType LastAction
+        {
+            get
+            {
+                if (lastActions.Count > 0)
+                    return lastActions[lastActions.Count - 1];
+                else return DecisionType.Laufen;
+            }
+        }
+
 		public void ActionDone(DecisionType Decision)
 		{
 			lastActions.Add(Decision);
