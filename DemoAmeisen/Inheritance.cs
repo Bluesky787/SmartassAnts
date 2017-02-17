@@ -45,25 +45,25 @@ namespace AntMe.SmartassAnts
             {
                 case Todesart.Besiegt:
                     //Weniger Wut, weil das zum Tod führt
-                    inheritedCharacter.wut.OverrideValue(Math.Max(inheritedCharacter.wut.Value() - 0.2, 0.0));
+                    inheritedCharacter.wut.OverrideValue(Math.Max(inheritedCharacter.wut.Value() - 20, 0.0));
                     //Mehr Teamfähigkeit, weil sie im Team seltener stirbt
-                    inheritedCharacter.teamfaehigkeit.OverrideValue(Math.Min(inheritedCharacter.teamfaehigkeit.Value() + 0.2, 1.0));
+                    inheritedCharacter.teamfaehigkeit.OverrideValue(Math.Min(inheritedCharacter.teamfaehigkeit.Value() + 20, 100.0));
                     break;
 
                 case Todesart.Gefressen:
                     //Weniger Wut, weil das zum Tod führt
-                    inheritedCharacter.wut.OverrideValue(Math.Max(inheritedCharacter.wut.Value() - 0.2, 0.0));
+                    inheritedCharacter.wut.OverrideValue(Math.Max(inheritedCharacter.wut.Value() - 20, 0.0));
                     //Weniger Faulheit, damit sie Wanzen nicht mehr im Weg stehen bleiben
-                    inheritedCharacter.faulheit.OverrideValue(Math.Max(inheritedCharacter.faulheit.Value() - 0.2, 0.0));
+                    inheritedCharacter.faulheit.OverrideValue(Math.Max(inheritedCharacter.faulheit.Value() - 20, 0.0));
                     //Mehr Teamfähigkeit, weil sie im Team seltener stirbt
-                    inheritedCharacter.teamfaehigkeit.OverrideValue(Math.Min(inheritedCharacter.teamfaehigkeit.Value() + 0.2, 1.0));
+                    inheritedCharacter.teamfaehigkeit.OverrideValue(Math.Min(inheritedCharacter.teamfaehigkeit.Value() + 20, 100.0));
                     break;
                     
                 case Todesart.Verhungert:
                     //Mehr Faulheit, weil sie nicht verhungern können, wenn sie stehen bleiben
-                    inheritedCharacter.faulheit.OverrideValue(Math.Min(inheritedCharacter.faulheit.Value() + 0.2, 1.0));
+                    inheritedCharacter.faulheit.OverrideValue(Math.Min(inheritedCharacter.faulheit.Value() + 20, 100.0));
                     //Weniger Teamfähigkeit, damit sie nicht mehr beim helfen verhungern kann
-                    inheritedCharacter.teamfaehigkeit.OverrideValue(Math.Max(inheritedCharacter.teamfaehigkeit.Value() - 0.2, 0.0));
+                    inheritedCharacter.teamfaehigkeit.OverrideValue(Math.Max(inheritedCharacter.teamfaehigkeit.Value() - 20, 0.0));
                    break;
             }
 
@@ -76,12 +76,12 @@ namespace AntMe.SmartassAnts
                 if (randDirection.NextDouble() >= 0.5)
                 {
                     //Wert verstärken, höchstens 50% mehr, aber nicht auf mehr als 1.0
-                    inheritedCharacter.faulheit.OverrideValue(Math.Max(inheritedCharacter.faulheit.Value() + 0.15 * randValue.NextDouble(), 1.0));
+                    inheritedCharacter.faulheit.OverrideValue(Math.Max(inheritedCharacter.faulheit.Value() + 0.15 * randValue.NextDouble()*100, 100.0));
                 }
                 else
                 {
                     //Wert verringern, auf maximal um Hälfte, aber nicht auf weniger als 0.0
-                    inheritedCharacter.faulheit.OverrideValue(Math.Min(inheritedCharacter.faulheit.Value() - 0.15 * randValue.NextDouble(), 0.0));
+                    inheritedCharacter.faulheit.OverrideValue(Math.Min(inheritedCharacter.faulheit.Value() - 0.15 * randValue.NextDouble()*100, 0.0));
                 }
             }
 
@@ -91,12 +91,12 @@ namespace AntMe.SmartassAnts
                 if (randDirection.NextDouble() >= 0.5)
                 {
                     //Wert verstärken, höchstens 50% mehr, aber nicht auf mehr als 1.0
-                    inheritedCharacter.teamfaehigkeit.OverrideValue(Math.Max(inheritedCharacter.teamfaehigkeit.Value() + 0.15 * randValue.NextDouble(), 1.0));
+                    inheritedCharacter.teamfaehigkeit.OverrideValue(Math.Max(inheritedCharacter.teamfaehigkeit.Value() + 0.15 * randValue.NextDouble()*100, 100.0));
                 }
                 else
                 {
                     //Wert verringern, auf maximal um Hälfte, aber nicht auf weniger als 0.0
-                    inheritedCharacter.teamfaehigkeit.OverrideValue(Math.Min(inheritedCharacter.teamfaehigkeit.Value() - 0.15 * randValue.NextDouble(), 0.0));
+                    inheritedCharacter.teamfaehigkeit.OverrideValue(Math.Min(inheritedCharacter.teamfaehigkeit.Value() - 0.15 * randValue.NextDouble()*100, 0.0));
                 }
             }
 
@@ -106,12 +106,12 @@ namespace AntMe.SmartassAnts
                 if (randDirection.NextDouble() >= 0.5)
                 {
                     //Wert verstärken, höchstens 50% mehr, aber nicht auf mehr als 1.0
-                    inheritedCharacter.wut.OverrideValue(Math.Max(inheritedCharacter.wut.Value() + 0.15 * randValue.NextDouble(), 1.0));
+                    inheritedCharacter.wut.OverrideValue(Math.Max(inheritedCharacter.wut.Value() + 0.15 * randValue.NextDouble()*100, 100.0));
                 }
                 else
                 {
                     //Wert verringern, auf maximal um Hälfte, aber nicht auf weniger als 0.0
-                    inheritedCharacter.wut.OverrideValue(Math.Min(inheritedCharacter.wut.Value() - 0.15 * randValue.NextDouble(), 0.0));
+                    inheritedCharacter.wut.OverrideValue(Math.Min(inheritedCharacter.wut.Value() - 0.15 * randValue.NextDouble()*100, 0.0));
                 }
             }
             return inheritedCharacter;
