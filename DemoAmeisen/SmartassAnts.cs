@@ -2,7 +2,7 @@
  * Vereerbung
  * Entscheidung, Freunden zu helfen (und Nahrung ggf. fallen lassen zu müssen), hinzufügen -> auch abhängig von ANzahl der Ameisen in der Nähe (je mehr in der Nähe, desto unwahrscheinlicher)
  * Spawn-Kaste abhängig von allgemeiner Stimmung (Mehr Wut -> mehr Aggro-Ameisen usw.)
- * Mutation in Vereerbung muss mit absoluten Werten arbeiten
+ * Einfluss von Decision Ratings auf Verhalten muss stärker sein
  * Verknüpfungsfunktion für kaskadierte Entscheidungen
  */
 
@@ -153,6 +153,8 @@ namespace AntMe.SmartassAnts
             //Ameise der Auflistung aller lebenden Ameisen hinzufügen
             this.id = idCounter++;
             Ants.Add(id, this);
+
+
 		}
         
         #region Kaste
@@ -165,6 +167,25 @@ namespace AntMe.SmartassAnts
         /// <returns>Der Name der Kaste der Ameise.</returns>
         public override string BestimmeKaste(Dictionary<string, int> anzahl)
 		{
+            //Bestimmen der allgemeinen Erfoglsquoten und Charaktere
+            double lazy = SmartassAnt.AllgemeineFaulheit;
+            double team = SmartassAnt.AllgemeineTeamfaehigkeit;
+            double anger = SmartassAnt.AllgemeineWut;
+
+            double sugar = SmartassAnt.ErfolgsquoteZucker;
+            double fruit = SmartassAnt.ErfolgsquoteObst;    //schwankt zu stark -> Anstieg halbieren, Abfall ok, manchmal plötzlich auf 0!
+            double enemy = SmartassAnt.ErfolgsquoteAngreifenAmeise;
+            double bug = SmartassAnt.ErfolgsquoteAngreifenWanze; //sinkt zu schnell
+            double run = SmartassAnt.ErfolgsquoteWegrennen;
+            double move = SmartassAnt.ErfolgsquoteLaufen;
+            
+            //Regeln:
+            /*
+             * Hohe Wut, geringe Erfolgsquote AngriffAmeisen -> mehr Aggromeisen
+             * 
+             */
+
+            //Kaste basierend auf den oberen Werten bestimmen, um die Erfolgsquoten mit passenden Ameisentypen zu unterstützen
             Random r = new Random();
             switch(r.Next(4))
             {
@@ -900,7 +921,7 @@ namespace AntMe.SmartassAnts
             }
         }
 
-        public static double AllegemeineFaulheit
+        public static double AllgemeineFaulheit
         {
             get
             {
@@ -913,7 +934,7 @@ namespace AntMe.SmartassAnts
                 return bored;
             }
         }
-        public static double AllegemeineTeamfaehigkeit
+        public static double AllgemeineTeamfaehigkeit
         {
             get
             {
