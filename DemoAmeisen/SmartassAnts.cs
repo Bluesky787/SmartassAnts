@@ -899,6 +899,32 @@ namespace AntMe.SmartassAnts
             }
         }
 
+        public static double AllegemeineFaulheit
+        {
+            get
+            {
+                double bored = 0;
+                foreach(SmartassAnt Ant in SmartassAnt.Ants.Values)
+                {
+                    bored += Ant.character.faulheit.Value();
+                }
+                bored /= (double)SmartassAnt.Ants.Count;
+                return bored;
+            }
+        }
+        public static double AllegemeineTeamfaehigkeit
+        {
+            get
+            {
+                double zussamenarbeit = 0;
+                foreach (SmartassAnt Ant in SmartassAnt.Ants.Values)
+                {
+                    zussamenarbeit += Ant.character.teamfaehigkeit.Value();
+                }
+                zussamenarbeit /= (double)SmartassAnt.Ants.Count;
+                return zussamenarbeit;
+            }
+        }
 
 
         #endregion
