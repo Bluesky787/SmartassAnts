@@ -64,6 +64,8 @@ namespace AntMe.SmartassAnts
                     inheritedCharacter.faulheit.OverrideValue(Math.Min(inheritedCharacter.faulheit.Value() + 20, 100.0));
                     //Weniger Teamfähigkeit, damit sie nicht mehr beim helfen verhungern kann
                     inheritedCharacter.teamfaehigkeit.OverrideValue(Math.Max(inheritedCharacter.teamfaehigkeit.Value() - 20, 0.0));
+                    //Mehr Wut, weil Verhalten sonst zu defensiv
+                    inheritedCharacter.wut.OverrideValue(Math.Min(inheritedCharacter.wut.Value() + 10, 100.0));
                    break;
             }
 
