@@ -354,8 +354,8 @@ namespace AntMe.Simulation {
             BattleRange = 5;
 
             // Livetime and Respawn
-            AntSimultaneousCount = 100;
-            BugSimultaneousCount = 0;
+            AntSimultaneousCount = 200;
+            BugSimultaneousCount = 10;
             SugarSimultaneousCount = 1;
             FruitSimultaneousCount = 2;
 
@@ -365,7 +365,7 @@ namespace AntMe.Simulation {
             AntCountPlayerMultiplier = 0f;
 
             AntTotalCount = 999999;
-            BugTotalCount = 0;
+            BugTotalCount = 999999;
             SugarTotalCount = 999999;
             FruitTotalCount = 999999;
 
@@ -403,12 +403,12 @@ namespace AntMe.Simulation {
 
             // Points
             PointsForFoodMultiplier = 1;
-            PointsForFruits = 0;
-            PointsForBug = 150;
+            PointsForFruits = 1000000;
+            PointsForBug = 300;
             PointsForForeignAnt = 5;
-            PointsForEatenAnts = 0;
-            PointsForBeatenAnts = -5;
-            PointsForStarvedAnts = 0;
+            PointsForEatenAnts = -10;
+            PointsForBeatenAnts = -10;
+            PointsForStarvedAnts = -5;
 
             // Castes
             CasteSettings = new SimulationCasteSettings();

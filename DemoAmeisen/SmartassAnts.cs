@@ -883,6 +883,22 @@ namespace AntMe.SmartassAnts
             breakActionAtFrame = currentFrame + breakActionAfterFrames;
         }
 
+        public static double AllgemeineWut
+        {
+            get
+            {
+                double anger = 0;
+                foreach (SmartassAnt Ant in SmartassAnt.Ants.Values)
+                {
+                    anger += Ant.character.wut.Value();
+                }
+
+                anger /= (double)SmartassAnt.Ants.Count;
+
+                return anger;
+            }
+        }
+
 
 
         #endregion

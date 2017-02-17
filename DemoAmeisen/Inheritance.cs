@@ -44,8 +44,8 @@ namespace AntMe.SmartassAnts
             switch (DeathReason)
             {
                 case Todesart.Besiegt:
-                    //Weniger Wut, weil das zum Tod führt
-                    inheritedCharacter.wut.OverrideValue(Math.Max(inheritedCharacter.wut.Value() - 20, 0.0));
+                    //Mehr Wut, weil weil das andere Ameisenvolk aggressiv ist
+                    inheritedCharacter.wut.OverrideValue(Math.Min(inheritedCharacter.wut.Value() + 20, 100.0));
                     //Mehr Teamfähigkeit, weil sie im Team seltener stirbt
                     inheritedCharacter.teamfaehigkeit.OverrideValue(Math.Min(inheritedCharacter.teamfaehigkeit.Value() + 20, 100.0));
                     break;
@@ -64,8 +64,6 @@ namespace AntMe.SmartassAnts
                     inheritedCharacter.faulheit.OverrideValue(Math.Min(inheritedCharacter.faulheit.Value() + 20, 100.0));
                     //Weniger Teamfähigkeit, damit sie nicht mehr beim helfen verhungern kann
                     inheritedCharacter.teamfaehigkeit.OverrideValue(Math.Max(inheritedCharacter.teamfaehigkeit.Value() - 20, 0.0));
-                    //Mehr Wut, weil Verhalten sonst zu defensiv
-                    inheritedCharacter.wut.OverrideValue(Math.Min(inheritedCharacter.wut.Value() + 10, 100.0));
                    break;
             }
 
