@@ -3,6 +3,7 @@
  * Entscheidung, Freunden zu helfen (und Nahrung ggf. fallen lassen zu müssen), hinzufügen -> auch abhängig von ANzahl der Ameisen in der Nähe (je mehr in der Nähe, desto unwahrscheinlicher)
  * Spawn-Kaste abhängig von allgemeiner Stimmung (Mehr Wut -> mehr Aggro-Ameisen usw.)
  * Mutation in Vereerbung muss mit absoluten Werten arbeiten
+ * Verknüpfungsfunktion für kaskadierte Entscheidungen
  */
 
 using System;
@@ -477,7 +478,7 @@ namespace AntMe.SmartassAnts
                         if (!greiftAn)
                         {
                             //dann über Angriff nachdenken
-                            if (FuzzyInferenceSystem.Superdecision5x5x2(character.teamfaehigkeit, character.ameisenFeindeInNaehe, character.angreifen, memory.GetDecisionValue(DecisionType.AngreifenWanze)))
+                            if (FuzzyInferenceSystem.Superdecision5x5x2(character.teamfaehigkeit, character.ameisenFreundeInNaehe, character.angreifen, memory.GetDecisionValue(DecisionType.AngreifenWanze)))
                             {
                                 if (marker.markerInformation == Marker.MarkerInformationType.Insekt)
                                 {
@@ -637,7 +638,7 @@ namespace AntMe.SmartassAnts
 		{
             if (!trägtNahrung && !greiftAn)
             {
-                if (FuzzyInferenceSystem.Superdecision5x5x2(character.wut, character.energie, character.angreifen, memory.GetDecisionValue(DecisionType.AngreifenWanze)) && FuzzyInferenceSystem.Superdecision5x5x2(character.wut, character.ameisenFreundeInNaehe, character.angreifen, memory.GetDecisionValue(DecisionType.AngreifenWanze)))
+                if (FuzzyInferenceSystem.Superdecision5x5x2(character.wut, character.energie, character.angreifen, memory.GetDecisionValue(DecisionType.AngreifenWanze)) && FuzzyInferenceSystem.Superdecision5x5x2(character.teamfaehigkeit, character.ameisenFreundeInNaehe, character.angreifen, memory.GetDecisionValue(DecisionType.AngreifenWanze)))
                 {
                     //hilfe rufen
                     SprüheMarkierung(Markers.Add(new Marker(Marker.MarkerType.HilfeWanze, wanze)), MarkierungGrößeHilfe);
