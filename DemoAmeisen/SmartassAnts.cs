@@ -883,6 +883,7 @@ namespace AntMe.SmartassAnts
             breakActionAtFrame = currentFrame + breakActionAfterFrames;
         }
 
+        //Character
         public static double AllgemeineWut
         {
             get
@@ -900,6 +901,90 @@ namespace AntMe.SmartassAnts
         }
 
 
+        //Decision Ratings
+        public static double ErfolgsquoteZucker
+        {
+            get
+            {
+                double sammelnZucker = 0;
+                foreach (SmartassAnt Ant in SmartassAnt.Ants.Values)
+                    sammelnZucker += Ant.memory.GetDecisionValue(DecisionType.SammelnZucker);
+
+                sammelnZucker /= (double)SmartassAnt.Ants.Count;
+
+                return sammelnZucker;
+            }
+        }
+
+        public static double ErfolgsquoteObst
+        {
+            get
+            {
+                double sammelnObst = 0;
+                foreach (SmartassAnt Ant in SmartassAnt.Ants.Values)
+                    sammelnObst += Ant.memory.GetDecisionValue(DecisionType.SammelnObst);
+
+                sammelnObst /= (double)SmartassAnt.Ants.Count;
+
+                return sammelnObst;
+            }
+        }
+
+        public static double ErfolgsquoteAngreifenAmeise
+        {
+            get
+            {
+                double angreifenAmeise = 0;
+                foreach (SmartassAnt Ant in SmartassAnt.Ants.Values)
+                    angreifenAmeise += Ant.memory.GetDecisionValue(DecisionType.AngreifenAmeise);
+
+                angreifenAmeise /= (double)SmartassAnt.Ants.Count;
+
+                return angreifenAmeise;
+            }
+        }
+
+        public static double ErfolgsquoteAngreifenWanze
+        {
+            get
+            {
+                double angreifenWanze = 0;
+                foreach (SmartassAnt Ant in SmartassAnt.Ants.Values)
+                    angreifenWanze += Ant.memory.GetDecisionValue(DecisionType.AngreifenWanze);
+
+                angreifenWanze /= (double)SmartassAnt.Ants.Count;
+
+                return angreifenWanze;
+            }
+        }
+
+        public static double ErfolgsquoteWegrennen
+        {
+            get
+            {
+                double wegrennen = 0;
+                foreach (SmartassAnt Ant in SmartassAnt.Ants.Values)
+                    wegrennen += Ant.memory.GetDecisionValue(DecisionType.Wegrennen);
+
+                wegrennen /= (double)SmartassAnt.Ants.Count;
+
+                return wegrennen;
+            }
+        }
+
+        public static double ErfolgsquoteLaufen
+        {
+            get
+            {
+                double laufen = 0;
+                foreach (SmartassAnt Ant in SmartassAnt.Ants.Values)
+                    laufen += Ant.memory.GetDecisionValue(DecisionType.Laufen);
+
+                laufen /= (double)SmartassAnt.Ants.Count;
+
+                return laufen;
+            }
+        }
 
         #endregion
 
