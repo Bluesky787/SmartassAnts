@@ -1,9 +1,10 @@
 ﻿/*ToDo:
- * Vereerbung
- * Entscheidung, Freunden zu helfen (und Nahrung ggf. fallen lassen zu müssen), hinzufügen -> auch abhängig von ANzahl der Ameisen in der Nähe (je mehr in der Nähe, desto unwahrscheinlicher)
+ * Vereerbung -> Memory fehlt
  * Spawn-Kaste abhängig von allgemeiner Stimmung (Mehr Wut -> mehr Aggro-Ameisen usw.)
  * Einfluss von Decision Ratings auf Verhalten muss stärker sein
  * Verknüpfungsfunktion für kaskadierte Entscheidungen
+ * Lerneffekt erhöhen für Nahrung sammeln, verringern für Angriff -> Ameisen greifen immer nur an
+ * Visualisierung der derzeitigen durchschnittlichen Charactere und Ratings
  */
 
 using System;
