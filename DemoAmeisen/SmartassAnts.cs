@@ -1,8 +1,6 @@
 ﻿/*ToDo:
  * Vereerbung -> Memory fehlt
  * Spawn-Kaste abhängig von allgemeiner Stimmung (Mehr Wut -> mehr Aggro-Ameisen usw.)
- * Verknüpfungsfunktion für kaskadierte Entscheidungen
- * Lerneffekt erhöhen für Nahrung sammeln, verringern für Angriff -> Ameisen greifen immer nur an
  * Visualisierung der derzeitigen durchschnittlichen Charactere und Ratings
  */
 
@@ -338,7 +336,7 @@ namespace AntMe.SmartassAnts
 		{
             if (!trägtNahrung)
             {
-                if (FuzzyInferenceSystem.Superdecision5x5x2(character.faulheit, character.energie, character.sammelnobst, memory.GetDecisionValue(DecisionType.SammelnObst)) && FuzzyInferenceSystem.Superdecision5x5x2(character.teamfaehigkeit, character.ameisenFreundeInNaehe, character.sammelnobst, memory.GetDecisionValue(DecisionType.Gruppieren)))
+                if (FuzzyInferenceSystem.CorrelateDecisionfunctions(FuzzyInferenceSystem.Superdecision5x5x2_Double(character.faulheit, character.energie, character.sammelnobst, memory.GetDecisionValue(DecisionType.SammelnObst)), FuzzyInferenceSystem.Superdecision5x5x2_Double(character.teamfaehigkeit, character.ameisenFreundeInNaehe, character.sammelnobst, memory.GetDecisionValue(DecisionType.Gruppieren))))
                 {
                     GeheZuZiel(obst);
                     memory.ActionDone(DecisionType.SammelnObst);
@@ -469,7 +467,7 @@ namespace AntMe.SmartassAnts
                         //helfen
                         if (!trägtNahrung && !greiftAn && !hilftFreund)
                         {
-                            if (FuzzyInferenceSystem.Superdecision5x5x2(character.faulheit, character.energie, character.sammelnobst, memory.GetDecisionValue(DecisionType.SammelnObst)) && FuzzyInferenceSystem.Superdecision5x5x2(character.teamfaehigkeit, character.ameisenFreundeInNaehe, character.sammelnobst, memory.GetDecisionValue(DecisionType.Gruppieren)))
+                            if (FuzzyInferenceSystem.CorrelateDecisionfunctions(FuzzyInferenceSystem.Superdecision5x5x2_Double(character.faulheit, character.energie, character.sammelnobst, memory.GetDecisionValue(DecisionType.SammelnObst)), FuzzyInferenceSystem.Superdecision5x5x2_Double(character.teamfaehigkeit, character.ameisenFreundeInNaehe, character.sammelnobst, memory.GetDecisionValue(DecisionType.Gruppieren))))
                             {
                                 if (marker.markerInformation == Marker.MarkerInformationType.Object)
                                 {
@@ -528,7 +526,7 @@ namespace AntMe.SmartassAnts
                         //das gleiche wie bei siehtObst()
                         if (!trägtNahrung && !greiftAn && !hilftFreund)
                         {
-                            if (FuzzyInferenceSystem.Superdecision5x5x2(character.faulheit, character.energie, character.sammelnobst, memory.GetDecisionValue(DecisionType.SammelnObst)) && FuzzyInferenceSystem.Superdecision5x5x2(character.teamfaehigkeit, character.ameisenFreundeInNaehe, character.sammelnobst, memory.GetDecisionValue(DecisionType.Gruppieren)))
+                            if (FuzzyInferenceSystem.CorrelateDecisionfunctions(FuzzyInferenceSystem.Superdecision5x5x2_Double(character.faulheit, character.energie, character.sammelnobst, memory.GetDecisionValue(DecisionType.SammelnObst)), FuzzyInferenceSystem.Superdecision5x5x2_Double(character.teamfaehigkeit, character.ameisenFreundeInNaehe, character.sammelnobst, memory.GetDecisionValue(DecisionType.Gruppieren))))
                             {
                                 if (marker.markerInformation == Marker.MarkerInformationType.Object)
                                 {
@@ -660,7 +658,7 @@ namespace AntMe.SmartassAnts
 		{
             if (!trägtNahrung && !greiftAn)
             {
-                if (FuzzyInferenceSystem.Superdecision5x5x2(character.wut, character.energie, character.angreifen, memory.GetDecisionValue(DecisionType.AngreifenWanze)) && FuzzyInferenceSystem.Superdecision5x5x2(character.teamfaehigkeit, character.ameisenFreundeInNaehe, character.angreifen, memory.GetDecisionValue(DecisionType.AngreifenWanze)))
+                if (FuzzyInferenceSystem.CorrelateDecisionfunctions(FuzzyInferenceSystem.Superdecision5x5x2_Double(character.wut, character.energie, character.angreifen, memory.GetDecisionValue(DecisionType.AngreifenWanze)), FuzzyInferenceSystem.Superdecision5x5x2_Double(character.teamfaehigkeit, character.ameisenFreundeInNaehe, character.angreifen, memory.GetDecisionValue(DecisionType.AngreifenWanze))))
                 {
                     //hilfe rufen
                     SprüheMarkierung(Markers.Add(new Marker(Marker.MarkerType.HilfeWanze, wanze)), MarkierungGrößeHilfe);

@@ -124,7 +124,28 @@ namespace AntMe.SmartassAnts
 		}
 		*/
 
-		public static bool Superdecision5x5x2(CharacterType CharacterDependency1, Circumstance CharacterDependency2, Decision CharacterConsequent, double ratingAction)
+        /// <summary>
+        /// Entscheidet eine Aktion basierend auf den CHaractereinflüssen, den aktuellen Umständen und dem Memory.
+        /// </summary>
+        /// <param name="CharacterDependency1"></param>
+        /// <param name="CharacterDependency2"></param>
+        /// <param name="CharacterConsequent"></param>
+        /// <param name="ratingAction"></param>
+        /// <returns>True, wenn Entscheidungsoption 1 gewählt wurde.</returns>
+        public static bool Superdecision5x5x2(CharacterType CharacterDependency1, Circumstance CharacterDependency2, Decision CharacterConsequent, double ratingAction)
+        {
+            return generateDecision(Superdecision5x5x2_Double(CharacterDependency1, CharacterDependency2, CharacterConsequent, ratingAction));
+        }
+
+        /// <summary>
+        /// Liefert Entscheidungswert für eine Aktion basierend auf den CHaractereinflüssen, den aktuellen Umständen und dem Memory.
+        /// </summary>
+        /// <param name="CharacterDependency1"></param>
+        /// <param name="CharacterDependency2"></param>
+        /// <param name="CharacterConsequent"></param>
+        /// <param name="ratingAction"></param>
+        /// <returns>Wert für Entscheidungsoption 1</returns>
+        public static double Superdecision5x5x2_Double(CharacterType CharacterDependency1, Circumstance CharacterDependency2, Decision CharacterConsequent, double ratingAction)
 		{
 			FuzzyEngine defuzzer = new FuzzyEngine();
 			defuzzer.LinguisticVariableCollection.Add(CharacterDependency1.characterParts);
@@ -151,7 +172,7 @@ namespace AntMe.SmartassAnts
 			//Standardwert setzen
 			if (double.IsNaN(defuzzedValue))
 			{
-				return CharacterConsequent.FirstOptionIsDefaultDecision;
+				return 0.5; //keine Entscheidung
 			}
 			else
 			{
@@ -175,8 +196,14 @@ namespace AntMe.SmartassAnts
                 defuzzedValue += ratingAction * 400; //zwischen 0..500 
 				defuzzedValue /= 5.0; //zwischen 0..100
                 
-				return generateDecision(defuzzedValue);
+				return defuzzedValue;
 			}
 		}
+
+        public static bool CorrelateDecisionfunctions(double ValueFunction1, double ValueFunction2)
+        {
+            double averageValue = (ValueFunction1 + ValueFunction2) / 2.0;
+            return generateDecision(averageValue);
+        }
     }
 }
