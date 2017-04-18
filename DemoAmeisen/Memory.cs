@@ -15,6 +15,7 @@ namespace AntMe.SmartassAnts
         internal static int gemerkterZucker_EntfernungZuBau = 9000000;
 
 		double learneffect = 0.01;
+        double learneffect_wait_go_group = 0.001; //viel kleiner, da diese Aktionen wesentlich häufiger hintereinander ausgeführt werden
 
 		public Memory(SmartassAnt ParentAnt)
 		{
@@ -62,8 +63,8 @@ namespace AntMe.SmartassAnts
                             ratingAngreifenWanze = Math.Min(ratingAngreifenWanze + learneffect, 1.0);
                             break;
                         case DecisionType.Laufen:
-                            ratingLaufen = Math.Min(ratingLaufen + learneffect, 1.0);
-                            ratingWarten = Math.Max(ratingWarten - (0.5* learneffect), 0.0);
+                            ratingLaufen = Math.Min(ratingLaufen + learneffect_wait_go_group, 1.0);
+                            ratingWarten = Math.Max(ratingWarten - (0.5* learneffect_wait_go_group), 0.0);
                             break;
                         case DecisionType.SammelnObst:
                             ratingSammelnObst = Math.Min(ratingSammelnObst + learneffect, 1.0);
@@ -72,8 +73,8 @@ namespace AntMe.SmartassAnts
                             ratingSammelnZucker = Math.Min(ratingSammelnZucker + learneffect, 1.0);
                             break;
                         case DecisionType.Warten:
-                            ratingWarten = Math.Min(ratingWegrennen + learneffect, 1.0);
-                            ratingLaufen = Math.Max(ratingLaufen - (0.5 * learneffect), 0.0);
+                            ratingWarten = Math.Min(ratingWegrennen + learneffect_wait_go_group, 1.0);
+                            ratingLaufen = Math.Max(ratingLaufen - (0.5 * learneffect_wait_go_group), 0.0);
                             break;
                         case DecisionType.Wegrennen:
                             ratingWegrennen = Math.Min(ratingWegrennen + learneffect, 1.0);
@@ -102,8 +103,8 @@ namespace AntMe.SmartassAnts
                             ratingAngreifenWanze = Math.Max(ratingAngreifenWanze - learneffect, 0.0);
                             break;
                         case DecisionType.Laufen:
-                            ratingLaufen = Math.Max(ratingLaufen - learneffect, 0.0);
-                            ratingWarten = Math.Min(ratingWarten + (0.5 * learneffect), 1.0);
+                            ratingLaufen = Math.Max(ratingLaufen - learneffect_wait_go_group, 0.0);
+                            ratingWarten = Math.Min(ratingWarten + (0.5 * learneffect_wait_go_group), 1.0);
                             break;
                         case DecisionType.SammelnObst:
                             ratingSammelnObst = Math.Max(ratingSammelnObst - learneffect, 0.0);
@@ -112,8 +113,8 @@ namespace AntMe.SmartassAnts
                             ratingSammelnZucker = Math.Max(ratingSammelnZucker - learneffect, 0.0);
                             break;
                         case DecisionType.Warten:
-                            ratingWarten = Math.Max(ratingWarten - learneffect, 0.0);
-                            ratingLaufen = Math.Min(ratingLaufen + (0.5 * learneffect), 1.0);
+                            ratingWarten = Math.Max(ratingWarten - learneffect_wait_go_group, 0.0);
+                            ratingLaufen = Math.Min(ratingLaufen + (0.5 * learneffect_wait_go_group), 1.0);
                             break;
                         case DecisionType.Wegrennen:
                             ratingWegrennen = Math.Max(ratingWegrennen - learneffect, 0.0);

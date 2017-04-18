@@ -172,7 +172,7 @@ namespace AntMe.SmartassAnts
 			//Standardwert setzen
 			if (double.IsNaN(defuzzedValue))
 			{
-				return 0.5; //keine Entscheidung
+				return 50; //keine Entscheidung
 			}
 			else
 			{
@@ -193,8 +193,8 @@ namespace AntMe.SmartassAnts
                 //Durchschnitt mit doppelter Gewichtung des Ratings
                 //defuzzedValue stets zwischen 0..100
                 //ratingAction stets zwischen 0..1
-                defuzzedValue += ratingAction * 400; //zwischen 0..500 
-				defuzzedValue /= 5.0; //zwischen 0..100
+                defuzzedValue += ratingAction * 200; //zwischen 0..300 
+				defuzzedValue /= 3.0; //zwischen 0..100
                 
 				return defuzzedValue;
 			}

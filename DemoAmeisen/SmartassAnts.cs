@@ -2,6 +2,7 @@
  * Vereerbung -> Memory fehlt
  * Spawn-Kaste abhängig von allgemeiner Stimmung (Mehr Wut -> mehr Aggro-Ameisen usw.)
  * Visualisierung der derzeitigen durchschnittlichen Charactere und Ratings
+ * Not-a-Number-Fehler bei SiehtObst Decision
  */
 
 using System;
