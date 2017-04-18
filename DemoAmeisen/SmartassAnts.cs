@@ -1,7 +1,6 @@
 ﻿/*ToDo:
  * Vereerbung -> Memory fehlt
  * Spawn-Kaste abhängig von allgemeiner Stimmung (Mehr Wut -> mehr Aggro-Ameisen usw.)
- * Einfluss von Decision Ratings auf Verhalten muss stärker sein
  * Verknüpfungsfunktion für kaskadierte Entscheidungen
  * Lerneffekt erhöhen für Nahrung sammeln, verringern für Angriff -> Ameisen greifen immer nur an
  * Visualisierung der derzeitigen durchschnittlichen Charactere und Ratings
@@ -22,6 +21,7 @@ namespace AntMe.SmartassAnts
         Foodloot,
         Spotter
     }
+
 	// Das Spieler-Attribut erlaubt das Festlegen des Volk-Names und von Vor-
 	// und Nachname des Spielers. Der Volk-Name muß zugewiesen werden, sonst wird
 	// das Volk nicht gefunden.

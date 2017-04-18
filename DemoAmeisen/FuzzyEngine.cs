@@ -170,9 +170,10 @@ namespace AntMe.SmartassAnts
                 }
 
                 //Durchschnitt mit doppelter Gewichtung des Ratings
-                defuzzedValue += ratingAction * 200;
-				defuzzedValue /= 3.0;
-
+                //defuzzedValue stets zwischen 0..100
+                //ratingAction stets zwischen 0..1
+                defuzzedValue += ratingAction * 400; //zwischen 0..500 
+				defuzzedValue /= 5.0; //zwischen 0..100
                 
 				return generateDecision(defuzzedValue);
 			}
