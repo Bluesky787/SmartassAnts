@@ -1,7 +1,4 @@
 ﻿/*ToDo:
- * Not-a-Number-Fehler bei SiehtObst Decision
- * Vereerbung -> Memory fehlt
- * Spawn-Kaste abhängig von allgemeiner Stimmung (Mehr Wut -> mehr Aggro-Ameisen usw.)
  * Visualisierung der derzeitigen durchschnittlichen Charactere und Ratings
  */
 
@@ -62,9 +59,9 @@ namespace AntMe.SmartassAnts
         Name = "Foodloot",
         GeschwindigkeitModifikator = 2,
         DrehgeschwindigkeitModifikator = -1,
-        LastModifikator = -1,
+        LastModifikator = 0,
         ReichweiteModifikator = 1,
-        SichtweiteModifikator = 1,
+        SichtweiteModifikator = 0,
         EnergieModifikator = -1,
         AngriffModifikator = -1
     )]
@@ -121,6 +118,8 @@ namespace AntMe.SmartassAnts
         int breakActionAfterFrames = 500, awaitingFrames = 50;
         int id;
 
+        Random randBool = new Random();
+
         static Queue<SmartassAnt> DiedAnts = new Queue<SmartassAnt>();
         public static SortedList<int, SmartassAnt> Ants = new SortedList<int, SmartassAnt>();
         static int idCounter = 0;
@@ -168,9 +167,10 @@ namespace AntMe.SmartassAnts
         public override string BestimmeKaste(Dictionary<string, int> anzahl)
 		{
             //Bestimmen der allgemeinen Erfoglsquoten und Charaktere
-            double lazy = SmartassAnt.AllgemeineFaulheit;
-            double team = SmartassAnt.AllgemeineTeamfaehigkeit;
-            double anger = SmartassAnt.AllgemeineWut;
+            // [0..1]
+            double lazy = SmartassAnt.AllgemeineFaulheit / 100.0;
+            double team = SmartassAnt.AllgemeineTeamfaehigkeit / 100.0;
+            double anger = SmartassAnt.AllgemeineWut / 100.0;
 
             double sugar = SmartassAnt.ErfolgsquoteZucker;
             double fruit = SmartassAnt.ErfolgsquoteObst;    //schwankt zu stark -> Anstieg halbieren, Abfall ok, manchmal plötzlich auf 0!
@@ -178,28 +178,38 @@ namespace AntMe.SmartassAnts
             double bug = SmartassAnt.ErfolgsquoteAngreifenWanze; //sinkt zu schnell
             double run = SmartassAnt.ErfolgsquoteWegrennen;
             double move = SmartassAnt.ErfolgsquoteLaufen;
-            
+
             //Regeln:
             /*
              * Hohe Wut, geringe Erfolgsquote AngriffAmeisen -> mehr Aggromeisen
-             * 
+             * Hohe Erfolgsquote Nahrung -> mehr FoodlootAnts
+             * Hohe Faulheit -> mehr Spotter
              */
 
             //Kaste basierend auf den oberen Werten bestimmen, um die Erfolgsquoten mit passenden Ameisentypen zu unterstützen
-            Random r = new Random();
-            switch(r.Next(4))
+
+            //mehr Aggromeisen
+            if (anger >= 0.55)
+                return KasteTypen.Aggro.ToString();
+
+            //mehr Spotter
+            if (lazy >= 0.60)
+                return KasteTypen.Spotter.ToString();
+
+            //mehr Ameisen mit Teamaufgaben
+            if (team >= 0.55)
             {
-                case 0:
-                    return KasteTypen.Standard.ToString();
-                case 1:
+                if (randBool.Next(2) == 1)
                     return KasteTypen.Aggro.ToString();
-                case 2:
+                else
                     return KasteTypen.Foodloot.ToString();
-                case 3:
-                    return KasteTypen.Spotter.ToString();
-                default:
-                    return KasteTypen.Standard.ToString();
             }
+
+            //Standard-Ameisen
+            if (randBool.Next(5) == 4)
+                return KasteTypen.Spotter.ToString();
+            else
+                return KasteTypen.Standard.ToString();
 		}
 
 		#endregion
