@@ -14,7 +14,7 @@ namespace AntMe.SmartassAnts
         internal static Zucker gemerkterZucker = null;
         internal static int gemerkterZucker_EntfernungZuBau = 9000000;
 
-		double learneffect = 0.01;
+		internal static double learneffect = 0.01;
         double learneffect_wait_go_group = 0.001; //viel kleiner, da diese Aktionen wesentlich häufiger hintereinander ausgeführt werden
 
 		public Memory(SmartassAnt ParentAnt)

@@ -147,6 +147,30 @@ namespace AntMe.SmartassAnts
         /// <returns>Wert für Entscheidungsoption 1</returns>
         public static double Superdecision5x5x2_Double(CharacterType CharacterDependency1, Circumstance CharacterDependency2, Decision CharacterConsequent, double ratingAction)
 		{
+            //Abfangen von Characterwerten über 100
+            //z.B. bei Energie > 100 (kann nur bei Dependency2 passieren)
+            bool useAdjustedCharacterValue = false;
+            double adjustedCharacterValue = 0;
+            if (CharacterDependency2.Value() > 100)
+            {
+                useAdjustedCharacterValue = true;
+                int diff = (int) CharacterDependency2.Value() - 100;
+                switch (CharacterDependency1.TypeOfCharacter)
+                {
+                    case CharacterTypes.Faulheit:
+                    case CharacterTypes.Wut:
+                        adjustedCharacterValue = Math.Max(CharacterDependency1.Value() - diff, 0);
+                        break;
+                    case CharacterTypes.Teamfaehigkeit:
+                        adjustedCharacterValue = Math.Min(CharacterDependency1.Value() + diff, 100);
+                        break;
+                    default:
+                        break;
+                }
+                
+            }
+
+
 			FuzzyEngine defuzzer = new FuzzyEngine();
 			defuzzer.LinguisticVariableCollection.Add(CharacterDependency1.characterParts);
 			defuzzer.LinguisticVariableCollection.Add(CharacterDependency2.characterParts);
@@ -154,7 +178,7 @@ namespace AntMe.SmartassAnts
 
 			defuzzer.Consequent = CharacterConsequent.ToString();
 
-			//Allgemeine Regel: C1_x AND C2_y → z_1, wenn y = 5-x;   x,y = [0..4]
+			//Allgemeine Regel: C1_x AND C2_y → z_1, wenn y >= 5-x;   x,y = [0..4]
 			//Greift keine Regel → Standardwert (nicht von DotFuzzy unterstützt)
 			for (int x = 4; x >= 0; x--)
 			{
@@ -162,42 +186,48 @@ namespace AntMe.SmartassAnts
 				{
 					defuzzer.FuzzyRuleCollection.Add(new FuzzyRule("IF (" + CharacterDependency1.characterParts.Name + " IS " + CharacterDependency1.characterParts.MembershipFunctionCollection[x].Name + ") AND ("+ CharacterDependency2.characterParts.Name + " IS " + CharacterDependency2.characterParts.MembershipFunctionCollection[y].Name + ") THEN " + CharacterConsequent.characterParts.Name + " IS " + CharacterConsequent.characterParts.MembershipFunctionCollection[1].Name));
 				}
-			} 
-			
-			CharacterDependency1.characterParts.InputValue = CharacterDependency1.Value();
-			CharacterDependency2.characterParts.InputValue = CharacterDependency2.Value();
+			}
 
+            //Wenn durch eine Ameisenklasse bspw. ein höherer Energiewert zugelassen wird, dann muss das hier berücksichtigt werden
+            if (useAdjustedCharacterValue)
+            {
+                CharacterDependency1.characterParts.InputValue = adjustedCharacterValue; //für positiven Effekt veränderter Wert
+                CharacterDependency2.characterParts.InputValue = 100; //normierter Wert
+            } else {
+                CharacterDependency1.characterParts.InputValue = CharacterDependency1.Value();
+                CharacterDependency2.characterParts.InputValue = CharacterDependency2.Value();
+            }
 			double defuzzedValue = defuzzer.Defuzzify();
 
 			//Standardwert setzen
+            //Immer dann, wenn keine positive Entscheidung getroffen wird, es also keine Regel dazu gab, dann defuzzedValue auf Wert für negative (default) Entscheidung setzen.
 			if (double.IsNaN(defuzzedValue))
 			{
-				return 50; //keine Entscheidung
+                defuzzedValue = CharacterConsequent.FirstOptionIsDefaultDecision ? 0.25 : 0.75;
 			}
-			else
-			{
 
-                //Gedächtnis einbeziehen (wie gut war die Entscheidung beim letzten Mal?)
-                //Durchschnitt reicht nicht aus, beachtet extreme Werte nicht ausreichend
-                //-> Extremere Werte sollen die Entscheidung stärker beeinflussen
-                if (ratingAction > 0.5)
-                {
-                    ratingAction = Math.Sqrt(ratingAction);
-                }
 
-                if (ratingAction < 0.5)
-                {
-                    ratingAction *= ratingAction;
-                }
+			//Gedächtnis einbeziehen (wie gut war die Entscheidung beim letzten Mal?)
+            //Durchschnitt reicht nicht aus, beachtet extreme Werte nicht ausreichend
+            //-> Extremere Werte sollen die Entscheidung stärker beeinflussen
+            if (ratingAction > 0.5)
+            {
+                ratingAction = Math.Sqrt(ratingAction);
+            }
 
-                //Durchschnitt mit doppelter Gewichtung des Ratings
-                //defuzzedValue stets zwischen 0..100
-                //ratingAction stets zwischen 0..1
-                defuzzedValue += ratingAction * 200; //zwischen 0..300 
-				defuzzedValue /= 3.0; //zwischen 0..100
+            if (ratingAction < 0.5)
+            {
+                ratingAction *= ratingAction;
+            }
+
+            //Durchschnitt mit doppelter Gewichtung des Ratings
+            //defuzzedValue stets zwischen 0..100
+            //ratingAction stets zwischen 0..1
+            defuzzedValue += ratingAction * 200; //zwischen 0..300 
+			defuzzedValue /= 3.0; //zwischen 0..100
                 
-				return defuzzedValue;
-			}
+			return defuzzedValue;
+			
 		}
 
         public static bool CorrelateDecisionfunctions(double ValueFunction1, double ValueFunction2)

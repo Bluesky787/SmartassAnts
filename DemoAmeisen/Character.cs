@@ -2,6 +2,14 @@
 
 namespace AntMe.SmartassAnts
 {
+    public enum CharacterTypes
+    {
+        Circumstance,
+        Faulheit,
+        Teamfaehigkeit,
+        Wut
+    }
+
     class CharacterTypePart
     {
         //private int[] FuzzyValues = new int[] { 0, 0, 10, 20 };
@@ -34,8 +42,10 @@ namespace AntMe.SmartassAnts
         protected double value;
         internal int numParts;
         internal DotFuzzy.LinguisticVariable characterParts;
+        internal CharacterTypes TypeOfCharacter;
 
-		internal CharacterTypePart getPart(string Name)
+
+        internal CharacterTypePart getPart(string Name)
         {
             return null;
         }  
@@ -61,11 +71,11 @@ namespace AntMe.SmartassAnts
     }
 
 	class Faulheit : CharacterType
-    {        
+    {
         public Faulheit(double InitValue)
         {
             this.value = InitValue;
-
+            this.TypeOfCharacter = CharacterTypes.Faulheit;
             characterParts = new DotFuzzy.LinguisticVariable("Faulheit");
             characterParts.MembershipFunctionCollection.Add(new DotFuzzy.MembershipFunction("Nicht_Faul", FuzzyValues[0][0], FuzzyValues[0][1], FuzzyValues[0][2], FuzzyValues[0][3]));
             characterParts.MembershipFunctionCollection.Add(new DotFuzzy.MembershipFunction("Kaum_Faul", FuzzyValues[1][0], FuzzyValues[1][1], FuzzyValues[1][2], FuzzyValues[1][3]));
@@ -77,9 +87,10 @@ namespace AntMe.SmartassAnts
 
 	class Teamfaehigkeit : CharacterType
 	{
-		public Teamfaehigkeit(double InitValue)
+        public Teamfaehigkeit(double InitValue)
 		{
 			this.value = InitValue;
+            this.TypeOfCharacter = CharacterTypes.Teamfaehigkeit;
 
 			characterParts = new DotFuzzy.LinguisticVariable("Teamfaehigkeit");
 			characterParts.MembershipFunctionCollection.Add(new DotFuzzy.MembershipFunction("Nicht_Teamfaehig", FuzzyValues[0][0], FuzzyValues[0][1], FuzzyValues[0][2], FuzzyValues[0][3]));
@@ -92,9 +103,10 @@ namespace AntMe.SmartassAnts
 
 	class Wut : CharacterType
 	{
-		public Wut(double InitValue)
+        public Wut(double InitValue)
 		{
             value = InitValue;
+            this.TypeOfCharacter = CharacterTypes.Wut;
 
 			characterParts = new DotFuzzy.LinguisticVariable("Wut");
 			characterParts.MembershipFunctionCollection.Add(new DotFuzzy.MembershipFunction("Nicht_Wuetend", FuzzyValues[0][0], FuzzyValues[0][1], FuzzyValues[0][2], FuzzyValues[0][3]));
@@ -142,7 +154,7 @@ namespace AntMe.SmartassAnts
             //energie = new Energie(CircumstanceType.Energie, parentAnt);
 
             //Character
-            faulheit = new Faulheit(0);
+            faulheit = new Faulheit(50);
 			wut = new Wut(50);
 			teamfaehigkeit = new Teamfaehigkeit(50);
 						

@@ -68,12 +68,21 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="aTomApfelmeisen.cs" />
+    <Compile Include="aTomGruppenmeisen.cs" />
+    <Compile Include="aTomKampfmeisen.cs" />
+    <Compile Include="aTomZuckermeisen.cs" />
+    <Compile Include="DemoAMeisen.cs" />
+    <Compile Include="DemoBMeisen.cs" />
+    <Compile Include="DemoCMeisen.cs" />
+    <Compile Include="GruppenAmeisen.cs" />
     <Compile Include="Inheritance.cs" />
     <Compile Include="Character.cs" />
     <Compile Include="Circumstance.cs" />
     <Compile Include="Decision.cs" />
     <Compile Include="DynamischeAmeisen.cs" />
     <Compile Include="FuzzyEngine.cs" />
+    <Compile Include="KreisAmeisen.cs" />
     <Compile Include="Marker.cs" />
     <Compile Include="Memory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

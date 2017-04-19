@@ -14,6 +14,8 @@ namespace AntMe.SmartassAnts
 		Punktzahl
 	}
 
+    
+
 	abstract class Circumstance : CharacterType
 	{
 		/// <summary>
@@ -27,6 +29,7 @@ namespace AntMe.SmartassAnts
 		{
 			this.circumstanceType = circumstanceType;
 			this.parentAnt = parentAnt;
+            this.TypeOfCharacter = CharacterTypes.Circumstance;
 		}
 
 		internal CircumstanceType circumstanceType;
