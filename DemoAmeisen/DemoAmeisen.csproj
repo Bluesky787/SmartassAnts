@@ -81,7 +81,7 @@
     <Compile Include="Circumstance.cs" />
     <Compile Include="Decision.cs" />
     <Compile Include="DynamischeAmeisen.cs" />
-    <Compile Include="FuzzyEngine.cs" />
+    <Compile Include="FuzzyInferenceSystem.cs" />
     <Compile Include="KreisAmeisen.cs" />
     <Compile Include="Marker.cs" />
     <Compile Include="Memory.cs" />
