@@ -7,6 +7,8 @@ namespace AntMe.SmartassAnts
 {
     class FuzzyInferenceSystem
     {
+        static double PreferenceWeight = 2.0;
+
         public FuzzyInferenceSystem()
         {
 
@@ -146,7 +148,7 @@ namespace AntMe.SmartassAnts
         /// <param name="ratingAction"></param>
         /// <returns>Wert für Entscheidungsoption 1</returns>
         public static double Superdecision5x5x2_Double(CharacterType CharacterDependency1, Circumstance CharacterDependency2, Decision CharacterConsequent, double ratingAction)
-		{
+        {
             //Abfangen von Characterwerten über 100
             //z.B. bei Energie > 100 (kann nur bei Dependency2 passieren)
             bool useAdjustedCharacterValue = false;
@@ -154,7 +156,7 @@ namespace AntMe.SmartassAnts
             if (CharacterDependency2.Value() > 100)
             {
                 useAdjustedCharacterValue = true;
-                int diff = (int) CharacterDependency2.Value() - 100;
+                int diff = (int)CharacterDependency2.Value() - 100;
                 switch (CharacterDependency1.TypeOfCharacter)
                 {
                     case CharacterTypes.Faulheit:
@@ -167,47 +169,49 @@ namespace AntMe.SmartassAnts
                     default:
                         break;
                 }
-                
+
             }
 
 
-			FuzzyEngine defuzzer = new FuzzyEngine();
-			defuzzer.LinguisticVariableCollection.Add(CharacterDependency1.characterParts);
-			defuzzer.LinguisticVariableCollection.Add(CharacterDependency2.characterParts);
-			defuzzer.LinguisticVariableCollection.Add(CharacterConsequent.characterParts);
+            FuzzyEngine defuzzer = new FuzzyEngine();
+            defuzzer.LinguisticVariableCollection.Add(CharacterDependency1.characterParts);
+            defuzzer.LinguisticVariableCollection.Add(CharacterDependency2.characterParts);
+            defuzzer.LinguisticVariableCollection.Add(CharacterConsequent.characterParts);
 
-			defuzzer.Consequent = CharacterConsequent.ToString();
+            defuzzer.Consequent = CharacterConsequent.ToString();
 
-			//Allgemeine Regel: C1_x AND C2_y → z_1, wenn y >= 5-x;   x,y = [0..4]
-			//Greift keine Regel → Standardwert (nicht von DotFuzzy unterstützt)
-			for (int x = 4; x >= 0; x--)
-			{
-				for (int y = x; y < 5; y++)
-				{
-					defuzzer.FuzzyRuleCollection.Add(new FuzzyRule("IF (" + CharacterDependency1.characterParts.Name + " IS " + CharacterDependency1.characterParts.MembershipFunctionCollection[x].Name + ") AND ("+ CharacterDependency2.characterParts.Name + " IS " + CharacterDependency2.characterParts.MembershipFunctionCollection[y].Name + ") THEN " + CharacterConsequent.characterParts.Name + " IS " + CharacterConsequent.characterParts.MembershipFunctionCollection[1].Name));
-				}
-			}
+            //Allgemeine Regel: C1_x AND C2_y → z_1, wenn y >= 5-x;   x,y = [0..4]
+            //Greift keine Regel → Standardwert (nicht von DotFuzzy unterstützt)
+            for (int x = 4; x >= 0; x--)
+            {
+                for (int y = x; y < 5; y++)
+                {
+                    defuzzer.FuzzyRuleCollection.Add(new FuzzyRule("IF (" + CharacterDependency1.characterParts.Name + " IS " + CharacterDependency1.characterParts.MembershipFunctionCollection[x].Name + ") AND (" + CharacterDependency2.characterParts.Name + " IS " + CharacterDependency2.characterParts.MembershipFunctionCollection[y].Name + ") THEN " + CharacterConsequent.characterParts.Name + " IS " + CharacterConsequent.characterParts.MembershipFunctionCollection[1].Name));
+                }
+            }
 
             //Wenn durch eine Ameisenklasse bspw. ein höherer Energiewert zugelassen wird, dann muss das hier berücksichtigt werden
             if (useAdjustedCharacterValue)
             {
                 CharacterDependency1.characterParts.InputValue = adjustedCharacterValue; //für positiven Effekt veränderter Wert
                 CharacterDependency2.characterParts.InputValue = 100; //normierter Wert
-            } else {
+            }
+            else
+            {
                 CharacterDependency1.characterParts.InputValue = CharacterDependency1.Value();
                 CharacterDependency2.characterParts.InputValue = CharacterDependency2.Value();
             }
-			double defuzzedValue = defuzzer.Defuzzify();
+            double defuzzedValue = defuzzer.Defuzzify();
 
-			//Standardwert setzen
+            //Standardwert setzen
             //Immer dann, wenn keine positive Entscheidung getroffen wird, es also keine Regel dazu gab, dann defuzzedValue auf Wert für negative (default) Entscheidung setzen.
-			if (double.IsNaN(defuzzedValue))
-			{
+            if (double.IsNaN(defuzzedValue))
+            {
                 defuzzedValue = CharacterConsequent.FirstOptionIsDefaultDecision ? 0.25 : 0.75;
-			}
+            }
 
 
-			//Gedächtnis einbeziehen (wie gut war die Entscheidung beim letzten Mal?)
+            //Gedächtnis einbeziehen (wie gut war die Entscheidung beim letzten Mal?)
             //Durchschnitt reicht nicht aus, beachtet extreme Werte nicht ausreichend
             //-> Extremere Werte sollen die Entscheidung stärker beeinflussen
             if (ratingAction > 0.5)
@@ -220,15 +224,28 @@ namespace AntMe.SmartassAnts
                 ratingAction *= ratingAction;
             }
 
+            defuzzedValue = Overthink(ratingAction, defuzzedValue, PreferenceWeight); //zwischen 0..100
+
+            return defuzzedValue;
+
+        }
+
+        /// <summary>
+        /// Überdenkt die Basisentscheidung, indem sie sie mit den erlernten Entscheidungspräferenzen der Memory-Klasse verknüpft. Die Verknüpfung erfolgt über eine gewichtete Mittelung. 
+        /// </summary>
+        /// <param name="ratingAction">Die zu der Entscheidung gehörende Entscheidungspräferenz der Memory-Klasse</param>
+        /// <param name="defuzzedValue">Der Basiswert der Entscheidung</param>
+        /// <param name="preferenceWeight">Die Gewichtung der Entscheidungspräferenz als Verhältnis zur zum Basiswert. Ein Wert von 2 bedeutet, dass die Präferenz zu 2 Teilen, der Basiswert zu einem Teil in die neue Entscheidung eingeht.</param>
+        /// <returns></returns>
+        private static double Overthink(double ratingAction, double defuzzedValue, double preferenceWeight)
+        {
             //Durchschnitt mit doppelter Gewichtung des Ratings
             //defuzzedValue stets zwischen 0..100
             //ratingAction stets zwischen 0..1
-            defuzzedValue += ratingAction * 200; //zwischen 0..300 
-			defuzzedValue /= 3.0; //zwischen 0..100
-                
-			return defuzzedValue;
-			
-		}
+            defuzzedValue += ratingAction * preferenceWeight * 100; //bei weight=2 zwischen 0..300 
+            defuzzedValue /= (preferenceWeight + 1);
+            return defuzzedValue;
+        }
 
         public static bool CorrelateDecisionfunctions(double ValueFunction1, double ValueFunction2)
         {
